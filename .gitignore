@@ -27,3 +27,6 @@ bin/
 # Doxygen
 html/
 latex/
+
+# Mac stuff
+.DS_Store

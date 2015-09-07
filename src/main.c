@@ -1,7 +1,7 @@
 /**
  * @file main.c
  * @brief Khronos client
- * @version 0.1
+ * @version 0.2
  */
 #include <assert.h>
 #include <time.h>
