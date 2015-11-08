@@ -136,7 +136,7 @@ if(${LIBSNDFILE_FOUND})
 else(${LIBSNDFILE_FOUND})
 	ExternalProject_Add(
 		LibSndFile
-		DEPENDS FLAC libogg libvorbis
+		DEPENDS FLAC
 		URL "http://www.mega-nerd.com/libsndfile/files/libsndfile-1.0.25.tar.gz"
 		CONFIGURE_COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/lib/LibSndFile/configure --prefix=<INSTALL_DIR>
 		BUILD_COMMAND ${MAKE}
