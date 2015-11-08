@@ -86,6 +86,8 @@ else(${CURL_FOUND})
 		GIT_REPOSITORY "git://github.com/bagder/curl.git"
 		GIT_TAG "1b6bc02fb926403f04061721f9159e9887202a96"
 		SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/lib/curl
+        PATCH_COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/lib/cURL/buildconf
+        CONFIGURE_COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/lib/cURL/configure --prefix=<INSTALL_DIR>
 		BUILD_COMMAND ${MAKE}
 		UPDATE_COMMAND ""
 		INSTALL_COMMAND ""
@@ -117,8 +119,6 @@ else(${FLAC_FOUND}) # FLAC isn't installed on the system and needs to be downloa
     GIT_REPOSITORY "git://github.com/xiph/flac.git"
     GIT_TAG "826b64f37dc7e38998c5219859254411638ce7e8"
     SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/lib/flac
-    PATCH_COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/lib/cURL/buildconf
-    CONFIGURE_COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/lib/cURL/configure --prefix=<INSTALL_DIR>
     BUILD_COMMAND ${MAKE}
     UPDATE_COMMAND ""
     INSTALL_COMMAND ""
