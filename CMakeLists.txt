@@ -114,7 +114,7 @@ if(${FLAC_FOUND}) # do something if it is found, maybe tell the user
 else(${FLAC_FOUND}) # FLAC isn't installed on the system and needs to be downloaded
     ExternalProject_Add(
     FLAC
-    GIT_REPOSITORY "https://git.xiph.org/flac.git"
+    GIT_REPOSITORY "git://github.com/xiph/flac.git"
     GIT_TAG "826b64f37dc7e38998c5219859254411638ce7e8"
     SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/lib/flac
     PATCH_COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/lib/cURL/buildconf
