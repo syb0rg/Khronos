@@ -125,18 +125,6 @@ else(${FLAC_FOUND}) # FLAC isn't installed on the system and needs to be downloa
     LOG_TEST ON
     LOG_INSTALL ON
     )
-	ExternalProject_Add(
-	FLAC
-	URL "http://downloads.xiph.org/releases/flac/flac-1.3.0.tar.xz"
-	CONFIGURE_COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/lib/flac/configure --prefix=<INSTALL_DIR>
-	BUILD_COMMAND ${MAKE}
-	SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/lib/flac
-	UPDATE_COMMAND ""
-	INSTALL_COMMAND ""
-	LOG_DOWNLOAD ON
-	LOG_CONFIGURE ON
-	LOG_BUILD ON
-	)
 endif(${FLAC_FOUND})
 
 #find_package(LibOgg)
