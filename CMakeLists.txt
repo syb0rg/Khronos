@@ -117,8 +117,10 @@ else(${FLAC_FOUND}) # FLAC isn't installed on the system and needs to be downloa
     ExternalProject_Add(
     FLAC
     GIT_REPOSITORY "git://github.com/xiph/flac.git"
-    GIT_TAG "826b64f37dc7e38998c5219859254411638ce7e8"
+    GIT_TAG "0e11f73eabd3544f59937d0a0d8e076d7c9c2d1d"
     SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/lib/flac
+    PATCH_COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/lib/flac/autogen.sh
+    CONFIGURE_COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/lib/flac/configure --prefix=<INSTALL_DIR>
     BUILD_COMMAND ${MAKE}
     UPDATE_COMMAND ""
     INSTALL_COMMAND ""
