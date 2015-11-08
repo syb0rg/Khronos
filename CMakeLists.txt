@@ -105,6 +105,10 @@ else(${CURL_FOUND})
 	set(DEPENDENCIES ${DEPENDENCIES} libcurl)
 endif(${CURL_FOUND})
 
+#find_package(LibOgg)
+
+#find_package(LibVorbis)
+
 find_package(FLAC) # test if FLAC is installed on the system
 if(${FLAC_FOUND}) # do something if it is found, maybe tell the user
 else(${FLAC_FOUND}) # FLAC isn't installed on the system and needs to be downloaded
