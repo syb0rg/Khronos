@@ -26,10 +26,6 @@ if (DOXYGEN_FOUND)
 		)
 endif(DOXYGEN_FOUND)
 
-find_package(CURL REQUIRED)
-find_package(Portaudio REQUIRED)
-find_package(Flite REQUIRED)
-find_package(LibSndFile REQUIRED)
 find_package(PortAudio)
 if(${PORTAUDIO_FOUND})
 else(${PORTAUDIO_FOUND})
@@ -90,8 +86,6 @@ else(${CURL_FOUND})
 		GIT_REPOSITORY "git://github.com/bagder/curl.git"
 		GIT_TAG "1b6bc02fb926403f04061721f9159e9887202a96"
 		SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/lib/curl
-		PATCH_COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/lib/cURL/buildconf
-		CONFIGURE_COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/lib/cURL/configure --prefix=<INSTALL_DIR>
 		BUILD_COMMAND ${MAKE}
 		UPDATE_COMMAND ""
 		INSTALL_COMMAND ""
@@ -114,6 +108,23 @@ endif(${CURL_FOUND})
 find_package(FLAC) # test if FLAC is installed on the system
 if(${FLAC_FOUND}) # do something if it is found, maybe tell the user
 else(${FLAC_FOUND}) # FLAC isn't installed on the system and needs to be downloaded
+    ExternalProject_Add(
+    FLAC
+    GIT_REPOSITORY "https://git.xiph.org/flac.git"
+    GIT_TAG "826b64f37dc7e38998c5219859254411638ce7e8"
+    SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/lib/flac
+    PATCH_COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/lib/cURL/buildconf
+    CONFIGURE_COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/lib/cURL/configure --prefix=<INSTALL_DIR>
+    BUILD_COMMAND ${MAKE}
+    UPDATE_COMMAND ""
+    INSTALL_COMMAND ""
+    LOG_DOWNLOAD ON
+    LOG_UPDATE ON
+    LOG_CONFIGURE ON
+    LOG_BUILD ON
+    LOG_TEST ON
+    LOG_INSTALL ON
+    )
 	ExternalProject_Add(
 	FLAC
 	URL "http://downloads.xiph.org/releases/flac/flac-1.3.0.tar.xz"
