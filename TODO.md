@@ -3,6 +3,9 @@
     - SVN
     - libogg
     - libvorbis
+    - libtool
+    - autoconf
+    - automake
 * Run pahole to optimize data structure layouts
 * getopt() implementation?
 * Stanalone OS
