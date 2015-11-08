@@ -127,10 +127,6 @@ else(${FLAC_FOUND}) # FLAC isn't installed on the system and needs to be downloa
     )
 endif(${FLAC_FOUND})
 
-#find_package(LibOgg)
-
-#find_package(LibVorbis)
-
 find_package(LibSndFile)
 if(${LIBSNDFILE_FOUND})
 else(${LIBSNDFILE_FOUND})
