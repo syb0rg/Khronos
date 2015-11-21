@@ -163,6 +163,31 @@ else(${LIBSNDFILE_FOUND})
 endif(${LIBSNDFILE_FOUND})
 
 find_package(Flite)
+if(${FLITE_FOUND})
+else(${FLITE_FOUND})
+    ExternalProject_Add(
+    Flite
+    URL "http://www.speech.cs.cmu.edu/flite/packed/flite-1.4/flite-1.4-release.tar.bz2"
+    CONFIGURE_COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/lib/Flite/configure --prefix=<INSTALL_DIR>
+    BUILD_COMMAND ${MAKE}
+    SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/lib/Flite
+    UPDATE_COMMAND ""
+    INSTALL_COMMAND ""
+    LOG_DOWNLOAD ON
+    LOG_UPDATE ON
+    LOG_CONFIGURE ON
+    LOG_BUILD ON
+    LOG_TEST ON
+    LOG_INSTALL ON
+    )
+    ExternalProject_Get_Property(Flite source_dir)
+    ExternalProject_Get_Property(Flite binary_dir)
+    set(FLITE_SOURCE_DIR ${source_dir})
+    set(FLITE_BINARY_DIR ${binary_dir})
+    set(FLITE_LIBRARIES ${FLITE_BINARY_DIR}/)
+    include_directories(${FLITE_SOURCE_DIR})
+    set(DEPENDENCIES ${DEPENDENCIES} Flite)
+endif(${LIBSNDFILE_FOUND})
 
 include_directories(src/audio src/web ${PARCEL_SOURCE_DIR})
 set(LIBS ${LIBS} ${CURL_LIBRARIES} ${PARCEL_LIBRARIES} ${PORTAUDIO_LIBRARIES} ${FLITE_LIBRARIES} ${LIBSNDFILE_LIBRARIES} ${CURL_LIBRARIES})
