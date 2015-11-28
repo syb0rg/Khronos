@@ -44,7 +44,7 @@ const char* printHelp(void)
 							 "usage: ./Khronos [options] [options-input]\n"
 							 "  --help, -h, help \t Displays this help information\n"
 							 "  --version, -v, version \t Prints all version information\n"
-							 "  --duration, -v, duration \t Changes the duration of the recording"
+							 "  --duration, -v, duration \t Changes the duration of the recording\n"
 							 "  --say, -s, say <text> \t Uses the speech synthesis engine to say <text>";
 	return helpString;
 }
