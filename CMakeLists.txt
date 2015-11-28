@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8.7)
+cmake_minimum_required(VERSION 3.0.2)
 include(ExternalProject)
 project(Khronos)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
@@ -58,7 +58,7 @@ endif(${PORTAUDIO_FOUND})
 message(STATUS "Could not find parcel.  This dependency will be downloaded.")
 ExternalProject_Add(
 	parcel
-	GIT_REPOSITORY "git://github.com/syb0rg/parcel.git"
+	GIT_REPOSITORY "https://github.com/syb0rg/parcel.git"
 	GIT_TAG "c2fd447cd2af552021304e64b6bd66c88c170241"
 	SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/lib/parcel
     CMAKE_COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/lib/parcel
