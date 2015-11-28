@@ -15,8 +15,6 @@
 *.dylib
 
 # Executables
-build/
-bin/
 *.exe
 *.out
 *.app
@@ -30,3 +28,8 @@ latex/
 
 # Mac stuff
 .DS_Store
+
+# Folders
+build/
+bin/
+lib/
