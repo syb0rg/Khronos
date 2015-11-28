@@ -14,6 +14,5 @@
 * Accept more command line arguments
 * Integrate Words API
 * Integrate weather API
-* Integrated speech synthisis
 * Offline speech recognition
 * Implement better random number generator (PCG library)
