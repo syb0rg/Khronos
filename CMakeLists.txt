@@ -61,7 +61,6 @@ ExternalProject_Add(
 	GIT_REPOSITORY "https://github.com/syb0rg/parcel.git"
 	GIT_TAG "c2fd447cd2af552021304e64b6bd66c88c170241"
 	SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/lib/parcel
-    CMAKE_COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/lib/parcel
 	UPDATE_COMMAND ""
 	INSTALL_COMMAND ""
 	LOG_DOWNLOAD ON
@@ -75,6 +74,7 @@ ExternalProject_Get_Property(parcel source_dir)
 ExternalProject_Get_Property(parcel binary_dir)
 set(PARCEL_SOURCE_DIR ${source_dir})
 set(PARCEL_BINARY_DIR ${binary_dir})
+include_directories(${PARCEL_SOURCE_DIR})
 set(PARCEL_LIBRARIES ${PARCEL_BINARY_DIR}/libparcel.a)
 set(DEPENDENCIES ${DEPENDENCIES} parcel)
 
@@ -153,40 +153,35 @@ else(${LIBSNDFILE_FOUND})
 		LOG_TEST ON
 		LOG_INSTALL ON
 	)
-	ExternalProject_Get_Property(LibSndFile source_dir)
-	ExternalProject_Get_Property(LibSndFile binary_dir)
-	set(LIBSNDFILE_SOURCE_DIR ${source_dir})
-	set(LIBSNDFILE_BINARY_DIR ${binary_dir})
-	set(LIBSNDFILE_LIBRARIES ${LIBSNDFILE_BINARY_DIR}/)
-	include_directories(${LIBSNDFILE_SOURCE_DIR})
-	set(DEPENDENCIES ${DEPENDENCIES} LibSndFile)
+    set(DEPENDENCIES ${DEPENDENCIES} LibSndFile)
 endif(${LIBSNDFILE_FOUND})
+include_directories(${LIBSNDFILE_INCLUDE_DIRS})
 
 message(STATUS "Could not find tritium.  This dependency will be downloaded.")
 ExternalProject_Add(
-tritium
-GIT_REPOSITORY "https://github.com/syb0rg/tritium.git"
-GIT_TAG "4a198455f49807f7cd8d486082a740f04650075b"
-SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/lib/tritium
-CMAKE_COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/lib/tritium
-UPDATE_COMMAND ""
-INSTALL_COMMAND ""
-LOG_DOWNLOAD ON
-LOG_UPDATE ON
-LOG_CONFIGURE ON
-LOG_BUILD ON
-LOG_TEST ON
-LOG_INSTALL ON
+    tritium
+    GIT_REPOSITORY "https://github.com/syb0rg/tritium.git"
+    GIT_TAG "d9282c77d874962caedaf6083132615cbeee3a7d"
+    SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/lib/tritium
+    UPDATE_COMMAND ""
+    INSTALL_COMMAND ""
+    LOG_DOWNLOAD ON
+    LOG_UPDATE ON
+    LOG_CONFIGURE ON
+    LOG_BUILD ON
+    LOG_TEST ON
+    LOG_INSTALL ON
 )
 ExternalProject_Get_Property(tritium source_dir)
 ExternalProject_Get_Property(tritium binary_dir)
 set(TRITIUM_SOURCE_DIR ${source_dir})
 set(TRITIUM_BINARY_DIR ${binary_dir})
-set(TRITIUM_LIBRARIES ${PARCEL_BINARY_DIR}/libtritium.a)
+include_directories(${source_dir}/include)
+set(TRITIUM_LIBRARIES ${TRITIUM_BINARY_DIR}/libtritium.a)
 set(DEPENDENCIES ${DEPENDENCIES} tritium)
 
-include_directories(src/audio src/web ${PARCEL_SOURCE_DIR})
-set(LIBS ${LIBS} ${CURL_LIBRARIES} ${PARCEL_LIBRARIES} ${PORTAUDIO_LIBRARIES} ${FLITE_LIBRARIES} ${LIBSNDFILE_LIBRARIES} ${CURL_LIBRARIES})
+include_directories(src/audio src/web)
+set(LIBS ${LIBS} ${CURL_LIBRARIES} ${PARCEL_LIBRARIES} ${PORTAUDIO_LIBRARIES} ${FLITE_LIBRARIES} ${LIBSNDFILE_LIBRARIES} ${CURL_LIBRARIES} ${TRITIUM_LIBRARIES})
 file(GLOB_RECURSE sources ${PROJECT_SOURCE_DIR}/src/*.c)
 
 add_executable(Khronos ${sources})

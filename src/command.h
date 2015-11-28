@@ -1,8 +1,12 @@
 #ifndef COMMAND_H
 #define COMMAND_H
 
+#ifndef streq
 #define streq(x, y) (strcmp((x), (y)) == 0)
+#endif
+#ifndef ARRAY_SIZE
 #define ARRAY_SIZE(x) (sizeof(x)/sizeof(x[0]))
+#endif
 
 typedef struct
 {

@@ -6,7 +6,7 @@
 #include <assert.h>
 #include <time.h>
 #include <ctype.h>
-#include <flite/flite.h>
+#include <tritium/tritium.h>
 #include <errno.h>
 
 #include "audio.h"
@@ -16,7 +16,6 @@
 #include "parcel.h"
 
 cst_voice *register_cmu_us_rms(const char *str);
-const char* getTmpDir(void);
 
 const char* getTmpDir(void)
 {
@@ -30,7 +29,7 @@ const char* getTmpDir(void)
 static void say(const char *str)
 {
     cst_voice* v = register_cmu_us_rms(NULL);
-    flite_text_to_speech(str, v, "play");
+    tritium_textToSpeech(str, v, "play");
 }
 
 int main(int argc, char *argv[])
