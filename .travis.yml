@@ -30,16 +30,15 @@ before_install:
   - if [ "$CXX" == "clang++" ]; then export CXX=clang++-3.7; fi
   - |
     if [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then
-      - CMAKE_VERSION="3.0.2"
-      - wget "http://www.cmake.org/files/v3.0/cmake-${CMAKE_VERSION}.tar.gz"
-      - openssl sha1 "cmake-${CMAKE_VERSION}.tar.gz"
-      - tar xf "cmake-${CMAKE_VERSION}.tar.gz"
-      - cd "cmake-${CMAKE_VERSION}"
-      - ./bootstrap --prefix=~
-      - make
-      - make install
-      - export PATH="~/bin:${PATH}"
+      - sudo apt-get remove cmake
+      - wget http://www.cmake.org/files/v3.2/cmake-3.2.1.tar.gz
+      - tar -xzf cmake-3.2.1.tar.gz
+      - cd cmake-3.2.1
+      - ./bootstrap
+      - make -j8
+      - sudo make install
       - cd ..
+      - rm -rf cmake-3.2.1 cmake-3.2.1.tar.gz
       - which cmake
       - cmake --version
     else
