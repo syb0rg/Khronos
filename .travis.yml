@@ -10,7 +10,7 @@ matrix:
             - ubuntu-toolchain-r-test
             - llvm-toolchain-precise
           packages:
-            - clang-3.7
+            - clang-3.6
             - g++-5
     - os: linux
       compiler: gcc
@@ -26,8 +26,8 @@ matrix:
 before_install:
   - if [ "$CC"  == "gcc"     ]; then export CC=gcc-5; fi
   - if [ "$CXX" == "g++"     ]; then export CXX=g++-5; fi
-  - if [ "$CC"  == "clang"   ]; then export CC=clang-3.7; fi
-  - if [ "$CXX" == "clang++" ]; then export CXX=clang++-3.7; fi
+  - if [ "$CC"  == "clang"   ]; then export CC=clang-3.6; fi
+  - if [ "$CXX" == "clang++" ]; then export CXX=clang++-3.6; fi
   - |
     if [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then
       sudo apt-get remove cmake
@@ -51,4 +51,4 @@ before_script:
    - cd build
    - cmake ..
 
-script: make
+script: sudo make
