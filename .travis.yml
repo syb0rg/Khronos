@@ -1,24 +1,39 @@
 language: c
 
 matrix:
-    include:
-        - os: osx
-          env: PLATFORM=osx
-          compiler: clang
-        - os: linux
-          env: PLATFORM=linux CXX=g++-4.9 CC=gcc-4.9
-          compiler: gcc
+  include:
+    - os: linux
+      compiler: clang
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+            - llvm-toolchain-precise-3.8
+            - kalakris-cmake
+          packages:
+            - clang-3.8
+            - g++-5
+            - cmake
+    - os: linux
+      compiler: gcc
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+            - kalakris-cmake
+          packages:
+            - g++-5
+            - cmake
+    - os: osx
+      compiler: clang
 
 before_install:
-  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y; fi
-  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get update -qq; fi
-  - if [ "$TRAVIS_OS_NAME" == "linux", "$CXX" = "g++" ]; then sudo apt-get install -qq g++-5.3; fi
-  - if [ "$TRAVIS_OS_NAME" == "linux", "$CXX" = "g++" ]; then export CXX="g++-5.3" CC="gcc-5.3"; fi
-  - if [ "${TRAVIS_OS_NAME}" = "linux" ]; then
-      wget --no-check-certificate http://www.cmake.org/files/v3.3/cmake-3.3.2-Linux-i386.tar.gz
-      && tar -xzf cmake-3.3.2-Linux-i386.tar.gz
-      && sudo cp -fR cmake-3.3.2-Linux-i386/* /usr
-    else
+  - if [ "$CC"  == "gcc"     ]; then export CC=gcc-5; fi
+  - if [ "$CXX" == "g++"     ]; then export CXX=g++-5; fi
+  - if [ "$CC"  == "clang"   ]; then export CC=clang-3.8; fi
+  - if [ "$CXX" == "clang++" ]; then export CXX=clang++-3.8; fi
+  - |
+    if [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then
       brew update && brew unlink cmake
       brew install cmake
     fi
