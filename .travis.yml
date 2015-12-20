@@ -9,21 +9,17 @@ matrix:
           sources:
             - ubuntu-toolchain-r-test
             - llvm-toolchain-precise-3.6
-            - kalakris-cmake
           packages:
             - clang-3.6
             - g++-5
-            - cmake
     - os: linux
       compiler: gcc
       addons:
         apt:
           sources:
             - ubuntu-toolchain-r-test
-            - kalakris-cmake
           packages:
             - g++-5
-            - cmake
     - os: osx
       compiler: clang
 
@@ -33,7 +29,10 @@ before_install:
   - if [ "$CC"  == "clang"   ]; then export CC=clang-3.6; fi
   - if [ "$CXX" == "clang++" ]; then export CXX=clang++-3.6; fi
   - |
-    if [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then
+    if [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then
+    wget -O http://www.cmake.org/files/v3.0/cmake-3.0.2-Linux-i386.sh
+    echo sudo ln -f -s /opt/cmake*/bin/cmake /usr/local/bin/cmake && cd -
+    else
       brew update && brew unlink cmake
       brew install cmake
     fi
