@@ -8,10 +8,10 @@ matrix:
         apt:
           sources:
             - ubuntu-toolchain-r-test
-            - llvm-toolchain-precise-3.8
+            - llvm-toolchain-precise-3.6
             - kalakris-cmake
           packages:
-            - clang-3.8
+            - clang-3.6
             - g++-5
             - cmake
     - os: linux
@@ -30,8 +30,8 @@ matrix:
 before_install:
   - if [ "$CC"  == "gcc"     ]; then export CC=gcc-5; fi
   - if [ "$CXX" == "g++"     ]; then export CXX=g++-5; fi
-  - if [ "$CC"  == "clang"   ]; then export CC=clang-3.8; fi
-  - if [ "$CXX" == "clang++" ]; then export CXX=clang++-3.8; fi
+  - if [ "$CC"  == "clang"   ]; then export CC=clang-3.6; fi
+  - if [ "$CXX" == "clang++" ]; then export CXX=clang++-3.6; fi
   - |
     if [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then
       brew update && brew unlink cmake
