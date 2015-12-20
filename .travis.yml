@@ -14,8 +14,7 @@ before_install:
   - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get update -qq; fi
   - if [ "$TRAVIS_OS_NAME" == "linux", "$CXX" = "g++" ]; then sudo apt-get install -qq g++-5.3; fi
   - if [ "$TRAVIS_OS_NAME" == "linux", "$CXX" = "g++" ]; then export CXX="g++-5.3" CC="gcc-5.3"; fi
-  - |
-    if [ "${TRAVIS_OS_NAME}" = "linux" ]; then
+  - if [ "${TRAVIS_OS_NAME}" = "linux" ]; then
       wget --no-check-certificate http://www.cmake.org/files/v3.3/cmake-3.3.2-Linux-i386.tar.gz
       && tar -xzf cmake-3.3.2-Linux-i386.tar.gz
       && sudo cp -fR cmake-3.3.2-Linux-i386/* /usr
