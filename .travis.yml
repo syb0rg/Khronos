@@ -17,7 +17,7 @@ before_install:
   - |
     if [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then
       CMAKE_URL="http://www.cmake.org/files/v3.3/cmake-3.3.2-Linux-x86_64.tar.gz"
-      rm -rf cmake && mkdir cmake && travis_retry wget --no-check-certificate --quiet -O - ${CMAKE_URL} | tar --strip-components=1 -xz -C cmake
+      ls && sudo rm -rf cmake && ls && mkdir cmake && travis_retry wget --no-check-certificate --quiet -O - ${CMAKE_URL} | tar --strip-components=1 -xz -C cmake
       export PATH=${DEPS_DIR}/cmake/bin:${PATH}
     else
       brew update && brew unlink cmake
