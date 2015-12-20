@@ -26,8 +26,8 @@ matrix:
 before_install:
   - if [ "$CC"  == "gcc"     ]; then export CC=gcc-5; fi
   - if [ "$CXX" == "g++"     ]; then export CXX=g++-5; fi
-  - if [ "$CC"  == "clang"   ]; then export CC=clang-3.6; fi
-  - if [ "$CXX" == "clang++" ]; then export CXX=clang++-3.6; fi
+#- if [ "$CC"  == "clang"   ]; then export CC=clang-3.6; fi
+#- if [ "$CXX" == "clang++" ]; then export CXX=clang++-3.6; fi
   - |
     if [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then
       sudo apt-get remove cmake
@@ -46,9 +46,4 @@ before_install:
       brew install cmake
     fi
 
-before_script:
-   - mkdir build
-   - cd build
-   - cmake ..
-
-script: sudo make
+script: mkdir build && cd build && cmake .. && make
