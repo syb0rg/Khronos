@@ -10,7 +10,7 @@
 
 #define BUF_SIZE 0x1000
 #define RESPONSE_SIZE 0x100
-#define KEY ""
+#define KEY "AIzaSyA4IqJgF0Z2v4bEE9M98o8mMBw6Z9cRND8"
 
 void freeResponse(ServerResponse *resp)
 {
