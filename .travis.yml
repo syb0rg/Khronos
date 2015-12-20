@@ -30,8 +30,18 @@ before_install:
   - if [ "$CXX" == "clang++" ]; then export CXX=clang++-3.7; fi
   - |
     if [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then
-      wget http://www.cmake.org/files/v3.0/cmake-3.0.2-Linux-i386.sh
-      echo sudo ln -f -s /opt/cmake*/bin/cmake /usr/local/bin/cmake
+      - CMAKE_VERSION="3.0.2"
+      - wget "http://www.cmake.org/files/v3.0/cmake-${CMAKE_VERSION}.tar.gz"
+      - openssl sha1 "cmake-${CMAKE_VERSION}.tar.gz"
+      - tar xf "cmake-${CMAKE_VERSION}.tar.gz"
+      - cd "cmake-${CMAKE_VERSION}"
+      - ./bootstrap --prefix=~
+      - make
+      - make install
+      - export PATH="~/bin:${PATH}"
+      - cd ..
+      - which cmake
+      - cmake --version
     else
       brew update && brew unlink cmake
       brew install cmake
@@ -40,6 +50,6 @@ before_install:
 before_script:
    - mkdir build
    - cd build
-   - cmake ..
+   - ~/bin/cmake ..
 
 script: make
