@@ -31,20 +31,18 @@ before_install:
 #- if [ "$CXX" == "clang++" ]; then export CXX=clang++-3.6; fi
   - |
     if [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then
-      sudo apt-get remove cmake
-      wget --no-check-certificate http://www.cmake.org/files/v3.2/cmake-3.2.1.tar.gz
-      tar -xzf cmake-3.2.1.tar.gz
-      cd cmake-3.2.1
-      ./bootstrap
-      make -j8
-      sudo make install
-      cd ..
-      rm -rf cmake-3.2.1 cmake-3.2.1.tar.gz
-      which cmake
-      cmake --version
+      mkdir ~/cmake_tmp
+      cd ~/cmake_tmp
+      wget --no-check-certificate http://www.cmake.org/files/v3.3/cmake-3.3.2-Linux-x86_64.tar.gz -O cmake3.tar.gz
+      tar xf cmake3.tar.gz -C . --strip-components=1
+      export PATH=~/cmake_tmp/bin:$PATH
+      cd -
     else
       brew update && brew unlink cmake
       brew install cmake
     fi
+
+install:
+  - true
 
 script: mkdir build && cd build && cmake .. && make
