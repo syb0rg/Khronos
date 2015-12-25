@@ -4,10 +4,12 @@
  * @version 0.2
  */
 #include <assert.h>
-#include <time.h>
 #include <ctype.h>
-#include <tritium/tritium.h>
 #include <errno.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#include <time.h>
+#include <tritium/tritium.h>
 
 #include "audio.h"
 #include "internet.h"
