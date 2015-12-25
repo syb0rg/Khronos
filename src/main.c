@@ -108,7 +108,12 @@ int main(int argc, char *argv[])
             }
 
             const char *text = parcel_getItemFromJSON(resp->data, "transcript");
-            if (text) confidence = strtod(parcel_getItemFromJSON(resp->data, "confidence") ?: "0", NULL) * 100;
+            if (text)
+            {
+                const char* temp = parcel_getItemFromJSON(resp->data, "confidence");
+                if (temp) confidence = strtod(temp, NULL) * 100;
+                else confidence = 0.0;
+            }
             fprintf(stdout, "Recognized text: %s\n", text ?: RED_TEXT("No text recognized."));
             fprintf(stdout, "Confidence: %g%%\n", confidence);
             if (text)
