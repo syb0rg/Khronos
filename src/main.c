@@ -10,6 +10,7 @@
 #include <stdbool.h>
 #include <time.h>
 #include <tritium/tritium.h>
+#include <unistd.h>
 
 #include "audio.h"
 #include "internet.h"
@@ -126,10 +127,10 @@ int main(int argc, char *argv[])
                 }
                 if (!said) say("I could not understand what you said."); // there was some text, but a response was unknown
             }
-            remove(flacFile);
             flag = false;
         }
         close(fd);
+        unlink(flacFile);
     }
     freeAudioData(&data);
     freeResponse(resp);
