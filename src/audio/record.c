@@ -92,7 +92,7 @@ int init(PaStream **stream, AudioData *data, AudioSnippet *sampleBlock)
     return Pa_StartStream(*stream);
 }
 
-int processStream(PaStream *stream, AudioData *data, AudioSnippet *sampleBlock, int fd, bool *flag)
+int processStream(PaStream *stream, AudioData *data, AudioSnippet *sampleBlock, int fd, bool *sampleComplete)
 {
     static int i = 0;
     static time_t talking = 0;
@@ -126,7 +126,7 @@ int processStream(PaStream *stream, AudioData *data, AudioSnippet *sampleBlock, 
         double test = difftime(time(&silence), talking);
         if (test >= 1.5 && test <= 10 && data->recordedSamples)
         {
-            if (flag) *flag = true;
+            if (sampleComplete) *sampleComplete = true;
             storeFLAC(data, fd);
             talking = 0;
             free(data->recordedSamples);

@@ -71,6 +71,8 @@ ServerResponse *sendAudioData(void *data, int length, const char *language, uint
 	curl_easy_setopt(conn_hndl, CURLOPT_HTTPPOST, form);
 	curl_easy_setopt(conn_hndl, CURLOPT_WRITEFUNCTION, httpCallback);
 	curl_easy_setopt(conn_hndl, CURLOPT_WRITEDATA, resp);
+    curl_easy_setopt(conn_hndl, CURLINFO_HEADER_OUT, 1);
+    curl_easy_setopt(conn_hndl, CURLOPT_VERBOSE, 1);
 
 	// SSL certificates are not available on iOS, so we have to trust Google
 	curl_easy_setopt(conn_hndl, CURLOPT_SSL_VERIFYPEER, 0);
@@ -85,8 +87,8 @@ ServerResponse *sendAudioData(void *data, int length, const char *language, uint
 
 	// NULL-terminate the JSON response string
 	resp->data[resp->length] = '\0';
-
-	return resp;
+    
+    return resp;
 }
 /**
  * @fn int testConnection(void)
@@ -122,7 +124,7 @@ int getFileContents(const char *file, void **contents, size_t *size)
     int fd = open(file, O_RDONLY);
     if (fd >= 0)
     {
-        struct stat st = {};
+        struct stat st = {0};
         if (fstat(fd, &st) == 0)
         {
             void *result = mmap(NULL, st.st_size, PROT_READ, MAP_PRIVATE, fd, 0);
