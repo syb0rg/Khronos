@@ -117,7 +117,6 @@ int runKhronos(PaStream *stream, AudioData *data, AudioSnippet *sampleBlock, ps_
     {
         char *flacFileBuf = NULL;
         size_t flacFileLen = 0;
-        double confidence = 0.0;
 
         if ((err = getFileContents(fileName, (void**)&flacFileBuf, &flacFileLen)))
         {
@@ -126,25 +125,9 @@ int runKhronos(PaStream *stream, AudioData *data, AudioSnippet *sampleBlock, ps_
         }
         
         const char *text = recognizeFromFile(ps, fileName);
-//        ServerResponse *resp = sendAudioData(flacFileBuf, (int)flacFileLen, "en-US", data->sampleRate);
-//        if (!resp)
-//        {
-//            fprintf(stderr, "Error sending audio.");
-//            // TODO specific warning number
-//            return -1;
-//        }
-//        puts(resp->data);
-//        const char *text = parcel_getItemFromJSON(resp->data, "transcript");
-//        if (text)
-//        {
-//            const char* temp = parcel_getItemFromJSON(resp->data, "confidence");
-//            if (temp) confidence = strtod(temp, NULL) * 100;
-//            else confidence = 100;
-//        }
-//        freeResponse(resp);
         
-        fprintf(stdout, "Recognized text: %s\n", text ?: RED_TEXT("No text recognized."));
-        fprintf(stdout, "Confidence: %g%%\n", confidence);
+        if (text) fprintf(stdout, "Recognized text: %s\n", text);
+        else puts(RED_TEXT("No text recognized."));
         if (text)
         {
             bool said = false;
@@ -159,7 +142,8 @@ int runKhronos(PaStream *stream, AudioData *data, AudioSnippet *sampleBlock, ps_
                     said = true;
                 }
             }
-            if (!said) say("I could not understand what you said."); // there was some text, but a response was unknown
+            // there was some text, but a response was unknown
+            if (!said) say("I could not understand what you said.");
         }
         sampleComplete = false;
     }
@@ -172,9 +156,12 @@ int runKhronos(PaStream *stream, AudioData *data, AudioSnippet *sampleBlock, ps_
 int main(int argc, char *argv[])
 {
     srand ((unsigned) time(NULL));
+    
     // turn off pocketsphinx output
     err_set_logfp(NULL);
     err_set_debug_level(0);
+    
+    // handle command line arguments
     while (argc--)
     {
         if (streq("--help", argv[argc]) || streq("-h", argv[argc]) || streq("help", argv[argc]))
@@ -194,15 +181,7 @@ int main(int argc, char *argv[])
         }
     }
     
-    // this is a one time test, the software assumes that once it has a steady connection it is
-    // reliable for an indefinite amount of time
-    if (testConnection())
-    {
-        fprintf(stderr, "Speech recognition offline.\n");
-        say("Speech recognition offline.");
-        return -1;
-    }
-    
+    // initialize pocketsphinx stuff
     cmd_ln_t *config = cmd_ln_init(NULL, ps_args(), TRUE,
                                    "-hmm", MODELDIR "/en-us/en-us",
                                    "-lm", MODELDIR "/en-us/en-us.lm.bin",
@@ -220,6 +199,7 @@ int main(int argc, char *argv[])
         return -1;
     }
     
+    // initialize stuff for PortAudio
     AudioData *data = allocAudioData();
     AudioSnippet *sampleBlock = &((AudioSnippet)
                                   {
@@ -235,6 +215,7 @@ int main(int argc, char *argv[])
         err = runKhronos(stream, data, sampleBlock, ps);
     }
     
+    //cleanup
     freeAudioData(&data);
     free(sampleBlock->snippet);
     free(stream);
