@@ -50,7 +50,7 @@ long storeFLAC(AudioData *data, int fd)
     {
         .channels = data->numChannels,
         .samplerate = data->sampleRate,
-        .format = SF_FORMAT_FLAC | SF_FORMAT_PCM_16
+        .format = SF_FORMAT_WAV | SF_FORMAT_PCM_16
     };
     
     SNDFILE *outfile = sf_open_fd(fd, SFM_WRITE, &sfinfo, true);

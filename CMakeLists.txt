@@ -27,6 +27,70 @@ if (DOXYGEN_FOUND)
 		)
 endif ()
 
+# TODO: needs some find tuning
+FIND_PACKAGE(sphinxbase)
+if (${SPHINXBASE_FOUND})
+else ()
+    message(STATUS "Could not find sphinxbase.  This dependency will be downloaded.")
+    ExternalProject_Add(
+        sphinxbase
+        GIT_REPOSITORY      "https://github.com/cmusphinx/sphinxbase.git"
+        GIT_TAG             "e34b1c632392276101ed16e8a05862e43f038a7c"
+        SOURCE_DIR          ${CMAKE_CURRENT_SOURCE_DIR}/lib/sphinxbase
+        CONFIGURE_COMMAND   ${CMAKE_CURRENT_SOURCE_DIR}/lib/sphinxbase/autogen.sh --prefix=<INSTALL_DIR>
+        BUILD_COMMAND       ${MAKE}
+        UPDATE_COMMAND      ""
+        INSTALL_COMMAND     ""
+        LOG_DOWNLOAD        ON
+        LOG_UPDATE          ON
+        LOG_CONFIGURE       ON
+        LOG_BUILD           ON
+        LOG_TEST            ON
+        LOG_INSTALL         ON
+    )
+    ExternalProject_Get_Property(sphinxbase SOURCE_DIR)
+    ExternalProject_Get_Property(sphinxbase BINARY_DIR)
+    SET(SPHINXBASE_SOURCE_DIR ${SOURCE_DIR})
+    SET(SPHINXBASE_BINARY_DIR ${BINARY_DIR})
+    SET(SPHINXBASE_LIBRARIES ${SPHINXBASE_BINARY_DIR}/libsphinxbase.a)
+    INCLUDE_DIRECTORIES(${SPHINXBASE_SOURCE_DIR})
+    SET(DEPENDENCIES ${DEPENDENCIES} sphinxbase)
+endif ()
+SET(LIBS ${LIBS} ${SPHINXBASE_LIBRARIES})
+INCLUDE_DIRECTORIES(${SPHINXBASE_INCLUDE_DIR}/sphinxbase/)
+
+# TODO: check compilation
+FIND_PACKAGE(pocketsphinx)
+if (${POCKETSPHINX_FOUND})
+else ()
+    message(STATUS "Could not find pocketsphinx.  This dependency will be downloaded.")
+    ExternalProject_Add(
+        pocketsphinx
+        GIT_REPOSITORY      "https://github.com/cmusphinx/pocketsphinx.git"
+        GIT_TAG             "0d41af2efe3f77a3e7f22a54e42684bb1562876d"
+        SOURCE_DIR          ${CMAKE_CURRENT_SOURCE_DIR}/lib/pocketsphinx
+        CONFIGURE_COMMAND   ${CMAKE_CURRENT_SOURCE_DIR}/lib/pocketsphinx/autogen.sh --prefix=<INSTALL_DIR>
+        BUILD_COMMAND       ${MAKE}
+        UPDATE_COMMAND      ""
+        INSTALL_COMMAND     ""
+        LOG_DOWNLOAD        ON
+        LOG_UPDATE          ON
+        LOG_CONFIGURE       ON
+        LOG_BUILD           ON
+        LOG_TEST            ON
+        LOG_INSTALL         ON
+        )
+    ExternalProject_Get_Property(pocketsphinx SOURCE_DIR)
+    ExternalProject_Get_Property(pocketsphinx BINARY_DIR)
+    SET(POCKETSPHINX_SOURCE_DIR ${SOURCE_DIR})
+    SET(POCKETSPHINX_BINARY_DIR ${BINARY_DIR})
+    SET(POCKETSPHINX_LIBRARIES ${POCKETSPHINX_BINARY_DIR}/libpocketsphinx.a)
+    INCLUDE_DIRECTORIES(${POCKETSPHINX_SOURCE_DIR})
+    SET(DEPENDENCIES ${DEPENDENCIES} pocketsphinx)
+endif ()
+SET(LIBS ${LIBS} ${POCKETSPHINX_LIBRARIES})
+INCLUDE_DIRECTORIES(${POCKETSPHINX_INCLUDE_DIR}/pocketsphinx/)
+
 FIND_PACKAGE(PortAudio)
 if (${PORTAUDIO_FOUND})
 else ()
@@ -55,6 +119,7 @@ else ()
 	INCLUDE_DIRECTORIES(${PORTAUDIO_SOURCE_DIR})
 	SET(DEPENDENCIES ${DEPENDENCIES} PortAudio)
 endif ()
+SET(LIBS ${LIBS} ${PORTAUDIO_LIBRARIES})
 
 # TODO: create FindParcel.cmake
 message(STATUS "Could not find parcel.  This dependency will be downloaded.")
@@ -79,6 +144,7 @@ SET(PARCEL_BINARY_DIR ${BINARY_DIR})
 INCLUDE_DIRECTORIES(${PARCEL_SOURCE_DIR})
 SET(PARCEL_LIBRARIES ${PARCEL_BINARY_DIR}/libparcel.a)
 SET(DEPENDENCIES ${DEPENDENCIES} parcel)
+SET(LIBS ${LIBS} ${PARCEL_LIBRARIES})
 
 FIND_PACKAGE(CURL)
 if (${CURL_FOUND})
@@ -109,6 +175,7 @@ else ()
 	INCLUDE_DIRECTORIES(${CURL_SOURCE_DIR})
 	SET(DEPENDENCIES ${DEPENDENCIES} libcurl)
 endif ()
+SET(LIBS ${LIBS} ${CURL_LIBRARIES})
 
 #FIND_PACKAGE(LibOgg)
 
@@ -142,6 +209,7 @@ else ()
     SET(DEPENDENCIES ${DEPENDENCIES} libFLAC)
     )
 endif ()
+SET(LIBS ${LIBS} ${FLAC_LIBRARIES})
 
 FIND_PACKAGE(LibSndFile)
 if(${LIBSNDFILE_FOUND})
@@ -164,8 +232,10 @@ else ()
 	)
     SET(DEPENDENCIES ${DEPENDENCIES} LibSndFile)
 endif ()
+SET(LIBS ${LIBS} ${LIBSNDFILE_LIBRARIES})
 INCLUDE_DIRECTORIES(${LIBSNDFILE_INCLUDE_DIRS})
 
+# TODO: create FindTritium.cmake
 message(STATUS "Could not find tritium.  This dependency will be downloaded.")
 ExternalProject_Add(
     tritium
@@ -187,6 +257,7 @@ SET(TRITIUM_SOURCE_DIR ${SOURCE_DIR})
 SET(TRITIUM_BINARY_DIR ${BINARY_DIR})
 INCLUDE_DIRECTORIES(${SOURCE_DIR}/include)
 SET(TRITIUM_LIBRARIES ${TRITIUM_BINARY_DIR}/libtritium.a)
+SET(LIBS ${LIBS} ${TRITIUM_LIBRARIES})
 SET(DEPENDENCIES ${DEPENDENCIES} tritium)
 
 INCLUDE_DIRECTORIES(src/audio src/web)

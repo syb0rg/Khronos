@@ -1,4 +1,4 @@
-# Khronos - Version 0.3 (alpha)
+# Khronos - Version 0.4 (alpha)
 
 Khronos is an intellegent program that utilizes speech recognition to carry out a user's command.  Khronos can also sythesize speech in order to respond to the commands given to him.
 

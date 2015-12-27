@@ -1,12 +1,14 @@
 /**
  * @file main.c
  * @brief Khronos client
- * @version 0.3
+ * @version 0.4
  */
 #include <assert.h>
 #include <ctype.h>
 #include <errno.h>
 #include <limits.h>
+#include <pocketsphinx/pocketsphinx.h>
+#include <sphinxbase/err.h>
 #include <stdlib.h>
 #include <stdbool.h>
 #include <time.h>
@@ -18,6 +20,9 @@
 #include "command.h"
 #include "color.h"
 #include "parcel.h"
+
+// TODO: make more portable
+#define MODELDIR "/usr/local/share/pocketsphinx/model"
 
 cst_voice *register_cmu_us_rms(const char *str);
 
@@ -40,10 +45,10 @@ int createSafeFileDescriptor(const char* fileRoot)
 {
     // Creates temporary file safely
     char flacFile[FILENAME_MAX] = "";
-    snprintf(flacFile, FILENAME_MAX, "%sXXXXXX.flac", fileRoot);
+    snprintf(flacFile, FILENAME_MAX, "%sXXXXXX.wav", fileRoot);
     
-    // the 5 is for the length of the suffix ".flac"
-    return mkstemps(flacFile, 5);
+    // the 5 is for the length of the suffix ".wav"
+    return mkstemps(flacFile, 4);
 }
 
 const char* getPathFromDescriptor(int fd)
@@ -56,7 +61,48 @@ const char* getPathFromDescriptor(int fd)
     return NULL;
 }
 
-int runKhronos(PaStream *stream, AudioData *data, AudioSnippet *sampleBlock)
+static const char* recognizeFromFile(ps_decoder_t *ps, const char* fileName)
+{
+    int16 adbuf[2048];
+    FILE *file = NULL;
+    const char *hyp = NULL;
+    size_t k = 0;
+    
+    if ((file = fopen(fileName, "rb")) == NULL)
+    {
+        fprintf(stderr, "Failed to open file '%s' for reading", fileName);
+    }
+    
+    // verify .wav file?  I trust libsndfile to make a valid one
+    ps_start_utt(ps);
+    bool uttStarted = false;
+    
+    while ((k = fread(adbuf, sizeof(int16), 2048, file)) > 0)
+    {
+        ps_process_raw(ps, adbuf, k, false, false);
+        bool inSpeech = ps_get_in_speech(ps);
+        if (inSpeech && !uttStarted) uttStarted = true;
+        if (!inSpeech && uttStarted)
+        {
+            ps_end_utt(ps);
+            hyp = ps_get_hyp(ps, NULL);
+            ps_start_utt(ps);
+            uttStarted = false;
+        }
+    }
+    ps_end_utt(ps);
+    
+    if (uttStarted)
+    {
+        hyp = ps_get_hyp(ps, NULL);
+    }
+    
+    fclose(file);
+    return hyp;
+}
+
+
+int runKhronos(PaStream *stream, AudioData *data, AudioSnippet *sampleBlock, ps_decoder_t *ps)
 {
     int err = 0;
     bool sampleComplete = false;
@@ -79,22 +125,23 @@ int runKhronos(PaStream *stream, AudioData *data, AudioSnippet *sampleBlock)
             return err;
         }
         
-        ServerResponse *resp = sendAudioData(flacFileBuf, (int)flacFileLen, "en-US", data->sampleRate);
-        if (!resp)
-        {
-            fprintf(stderr, "Error sending audio.");
-            // TODO specific warning number
-            return -1;
-        }
-        puts(resp->data);
-        const char *text = parcel_getItemFromJSON(resp->data, "transcript");
-        if (text)
-        {
-            const char* temp = parcel_getItemFromJSON(resp->data, "confidence");
-            if (temp) confidence = strtod(temp, NULL) * 100;
-            else confidence = 100;
-        }
-        freeResponse(resp);
+        const char *text = recognizeFromFile(ps, fileName);
+//        ServerResponse *resp = sendAudioData(flacFileBuf, (int)flacFileLen, "en-US", data->sampleRate);
+//        if (!resp)
+//        {
+//            fprintf(stderr, "Error sending audio.");
+//            // TODO specific warning number
+//            return -1;
+//        }
+//        puts(resp->data);
+//        const char *text = parcel_getItemFromJSON(resp->data, "transcript");
+//        if (text)
+//        {
+//            const char* temp = parcel_getItemFromJSON(resp->data, "confidence");
+//            if (temp) confidence = strtod(temp, NULL) * 100;
+//            else confidence = 100;
+//        }
+//        freeResponse(resp);
         
         fprintf(stdout, "Recognized text: %s\n", text ?: RED_TEXT("No text recognized."));
         fprintf(stdout, "Confidence: %g%%\n", confidence);
@@ -125,6 +172,9 @@ int runKhronos(PaStream *stream, AudioData *data, AudioSnippet *sampleBlock)
 int main(int argc, char *argv[])
 {
     srand ((unsigned) time(NULL));
+    // turn off pocketsphinx output
+    err_set_logfp(NULL);
+    err_set_debug_level(0);
     while (argc--)
     {
         if (streq("--help", argv[argc]) || streq("-h", argv[argc]) || streq("help", argv[argc]))
@@ -153,6 +203,23 @@ int main(int argc, char *argv[])
         return -1;
     }
     
+    cmd_ln_t *config = cmd_ln_init(NULL, ps_args(), TRUE,
+                                   "-hmm", MODELDIR "/en-us/en-us",
+                                   "-lm", MODELDIR "/en-us/en-us.lm.bin",
+                                   "-dict", MODELDIR "/en-us/cmudict-en-us.dict",
+                                   NULL);
+    if (!config)
+    {
+        fprintf(stderr, "Failed to create config object, see log for details\n");
+        return -1;
+    }
+    ps_decoder_t *ps = ps_init(config);
+    if (!ps)
+    {
+        fprintf(stderr, "Failed to create recognizer, see log for details\n");
+        return -1;
+    }
+    
     AudioData *data = allocAudioData();
     AudioSnippet *sampleBlock = &((AudioSnippet)
                                   {
@@ -165,7 +232,7 @@ int main(int argc, char *argv[])
     
     while (!err)
     {
-        err = runKhronos(stream, data, sampleBlock);
+        err = runKhronos(stream, data, sampleBlock, ps);
     }
     
     freeAudioData(&data);

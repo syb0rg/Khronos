@@ -9,7 +9,7 @@
 #include "command.h"
 #include "color.h"
 
-#define KHRONOS_VERSION "0.3"
+#define KHRONOS_VERSION "0.4"
 #define KHRONOS_VERSION_STATE "alpha"
 #define DATE_LENGTH_MAX 10
 
