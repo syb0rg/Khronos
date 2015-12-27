@@ -3,12 +3,12 @@
  * @brief Khronos client
  * @version 0.4
  */
-#include <assert.h>
 #include <ctype.h>
 #include <errno.h>
 #include <fcntl.h>
 #include <limits.h>
 #include <pocketsphinx/pocketsphinx.h>
+#include <portaudio.h>
 #include <sphinxbase/err.h>
 #include <stdlib.h>
 #include <stdbool.h>

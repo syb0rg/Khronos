@@ -3,11 +3,12 @@
  * @brief Continuously records FLAC audio files
  */
 
+#include <math.h>
+#include <sndfile.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <math.h>
+#include <string.h>
 #include <time.h>
-#include <sndfile.h>
 
 #include "audio.h"
 

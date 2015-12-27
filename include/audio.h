@@ -6,9 +6,7 @@
 #define AUDIO_H
 
 #include <portaudio.h>
-#include <stdint.h>
 #include <stdbool.h>
-#include <string.h>
 
 /**
  * Holds all of the necessary information for building an
