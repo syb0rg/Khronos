@@ -72,6 +72,7 @@ int runKhronos(PaStream *stream, AudioData *data, AudioSnippet *sampleBlock)
         char *flacFileBuf = NULL;
         size_t flacFileLen = 0;
         double confidence = 0.0;
+
         if ((err = getFileContents(fileName, (void**)&flacFileBuf, &flacFileLen)))
         {
             fprintf(stdout, "Error reading FLAC file: %s\n", strerror(errno));

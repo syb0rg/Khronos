@@ -38,7 +38,7 @@ ServerResponse *sendAudioData(void *data, int length, const char *language, uint
 	 * Put the language code to the URL query string
 	 * If no language given, default to U. S. English
 	 */
-	snprintf(url, sizeof(url), "https://www.google.com/speech-api/v2/recognize?output=json&lang=%s&key=%s", language ? language : "en-US", KEY);
+	snprintf(url, sizeof(url), "https://www.google.com/speech-api/v2/recognize?client=chromium&output=json&lang=%s&key=%s", language ? language : "en-US", KEY);
 	resp = malloc(sizeof(*resp));
 	if (!resp) return NULL;
 
@@ -70,9 +70,6 @@ ServerResponse *sendAudioData(void *data, int length, const char *language, uint
 	curl_easy_setopt(conn_hndl, CURLOPT_HTTPHEADER, headers);
 	curl_easy_setopt(conn_hndl, CURLOPT_HTTPPOST, form);
 	curl_easy_setopt(conn_hndl, CURLOPT_WRITEFUNCTION, httpCallback);
-	curl_easy_setopt(conn_hndl, CURLOPT_WRITEDATA, resp);
-    curl_easy_setopt(conn_hndl, CURLINFO_HEADER_OUT, 1);
-    curl_easy_setopt(conn_hndl, CURLOPT_VERBOSE, 1);
 
 	// SSL certificates are not available on iOS, so we have to trust Google
 	curl_easy_setopt(conn_hndl, CURLOPT_SSL_VERIFYPEER, 0);
