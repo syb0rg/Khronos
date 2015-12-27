@@ -6,6 +6,7 @@
 #include <assert.h>
 #include <ctype.h>
 #include <errno.h>
+#include <fcntl.h>
 #include <limits.h>
 #include <pocketsphinx/pocketsphinx.h>
 #include <sphinxbase/err.h>
@@ -16,49 +17,20 @@
 #include <unistd.h>
 
 #include "audio.h"
-#include "internet.h"
 #include "command.h"
 #include "color.h"
 #include "parcel.h"
+#include "util.h"
 
 // TODO: make more portable
 #define MODELDIR "/usr/local/share/pocketsphinx/model"
 
 cst_voice *register_cmu_us_rms(const char *str);
 
-const char* getTmpDir(void)
-{
-    char *tmpdir = NULL;
-    if ((tmpdir = getenv("TEMP"))) return tmpdir;
-    else if ((tmpdir = getenv("TMP"))) return tmpdir;
-    else if ((tmpdir = getenv("TMPDIR"))) return tmpdir;
-    else return "/tmp/";
-}
-
 static void say(const char *str)
 {
     cst_voice* v = register_cmu_us_rms(NULL);
     tritium_textToSpeech(str, v, "play");
-}
-
-int createSafeFileDescriptor(const char* fileRoot)
-{
-    // Creates temporary file safely
-    char flacFile[FILENAME_MAX] = "";
-    snprintf(flacFile, FILENAME_MAX, "%sXXXXXX.wav", fileRoot);
-    
-    // the 5 is for the length of the suffix ".wav"
-    return mkstemps(flacFile, 4);
-}
-
-const char* getPathFromDescriptor(int fd)
-{
-    char* filePath = malloc(PATH_MAX);
-    if (fcntl(fd, F_GETPATH, filePath) != -1)
-    {
-        return filePath;
-    }
-    return NULL;
 }
 
 static const char* recognizeFromFile(ps_decoder_t *ps, const char* fileName)
@@ -115,15 +87,6 @@ int runKhronos(PaStream *stream, AudioData *data, AudioSnippet *sampleBlock, ps_
     }
     else if (sampleComplete)
     {
-        char *flacFileBuf = NULL;
-        size_t flacFileLen = 0;
-
-        if ((err = getFileContents(fileName, (void**)&flacFileBuf, &flacFileLen)))
-        {
-            fprintf(stdout, "Error reading FLAC file: %s\n", strerror(errno));
-            return err;
-        }
-        
         const char *text = recognizeFromFile(ps, fileName);
         
         if (text) fprintf(stdout, "Recognized text: %s\n", text);
