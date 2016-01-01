@@ -27,9 +27,11 @@ if (DOXYGEN_FOUND)
 		)
 endif ()
 
-# TODO: needs some find tuning
+FIND_PACKAGE(PkgConfig)
+
 FIND_PACKAGE(sphinxbase)
 if (${SPHINXBASE_FOUND})
+    INCLUDE_DIRECTORIES(${SPHINXBASE_INCLUDE_DIR}/sphinxbase/)
 else ()
     message(STATUS "Could not find sphinxbase.  This dependency will be downloaded.")
     ExternalProject_Add(
@@ -37,10 +39,11 @@ else ()
         GIT_REPOSITORY      "https://github.com/cmusphinx/sphinxbase.git"
         GIT_TAG             "e34b1c632392276101ed16e8a05862e43f038a7c"
         SOURCE_DIR          ${CMAKE_CURRENT_SOURCE_DIR}/lib/sphinxbase
-        CONFIGURE_COMMAND   ${CMAKE_CURRENT_SOURCE_DIR}/lib/sphinxbase/autogen.sh --prefix=<INSTALL_DIR>
+        CONFIGURE_COMMAND   ${CMAKE_CURRENT_SOURCE_DIR}/lib/sphinxbase/autogen.sh
         BUILD_COMMAND       ${MAKE}
         UPDATE_COMMAND      ""
         INSTALL_COMMAND     ""
+        BUILD_IN_SOURCE     ON
         LOG_DOWNLOAD        ON
         LOG_UPDATE          ON
         LOG_CONFIGURE       ON
@@ -52,27 +55,29 @@ else ()
     ExternalProject_Get_Property(sphinxbase BINARY_DIR)
     SET(SPHINXBASE_SOURCE_DIR ${SOURCE_DIR})
     SET(SPHINXBASE_BINARY_DIR ${BINARY_DIR})
-    SET(SPHINXBASE_LIBRARIES ${SPHINXBASE_BINARY_DIR}/libsphinxbase.a)
-    INCLUDE_DIRECTORIES(${SPHINXBASE_SOURCE_DIR})
+    SET(SPHINXBASE_LIBRARIES ${SPHINXBASE_BINARY_DIR}/src/libsphinxbase/.libs/libsphinxbase.a)
+    INCLUDE_DIRECTORIES(${SPHINXBASE_SOURCE_DIR}/include)
     SET(DEPENDENCIES ${DEPENDENCIES} sphinxbase)
 endif ()
 SET(LIBS ${LIBS} ${SPHINXBASE_LIBRARIES})
-INCLUDE_DIRECTORIES(${SPHINXBASE_INCLUDE_DIR}/sphinxbase/)
 
-# TODO: check compilation
 FIND_PACKAGE(pocketsphinx)
 if (${POCKETSPHINX_FOUND})
+    INCLUDE_DIRECTORIES(${POCKETSPHINX_INCLUDE_DIR}/pocketsphinx/)
+    add_definitions( -DMODELDIR="/usr/local/share/pocketsphinx/model")  # more portable?
 else ()
     message(STATUS "Could not find pocketsphinx.  This dependency will be downloaded.")
     ExternalProject_Add(
         pocketsphinx
+        DEPENDS             sphinxbase
         GIT_REPOSITORY      "https://github.com/cmusphinx/pocketsphinx.git"
         GIT_TAG             "0d41af2efe3f77a3e7f22a54e42684bb1562876d"
         SOURCE_DIR          ${CMAKE_CURRENT_SOURCE_DIR}/lib/pocketsphinx
-        CONFIGURE_COMMAND   ${CMAKE_CURRENT_SOURCE_DIR}/lib/pocketsphinx/autogen.sh --prefix=<INSTALL_DIR>
+        CONFIGURE_COMMAND   ${CMAKE_CURRENT_SOURCE_DIR}/lib/pocketsphinx/autogen.sh --prefix=<INSTALL_DIR> --with-sphinxbase=${SPHINXBASE_BINARY_DIR}
         BUILD_COMMAND       ${MAKE}
         UPDATE_COMMAND      ""
         INSTALL_COMMAND     ""
+        BUILD_IN_SOURCE     ON
         LOG_DOWNLOAD        ON
         LOG_UPDATE          ON
         LOG_CONFIGURE       ON
@@ -84,12 +89,12 @@ else ()
     ExternalProject_Get_Property(pocketsphinx BINARY_DIR)
     SET(POCKETSPHINX_SOURCE_DIR ${SOURCE_DIR})
     SET(POCKETSPHINX_BINARY_DIR ${BINARY_DIR})
-    SET(POCKETSPHINX_LIBRARIES ${POCKETSPHINX_BINARY_DIR}/libpocketsphinx.a)
-    INCLUDE_DIRECTORIES(${POCKETSPHINX_SOURCE_DIR})
+    SET(POCKETSPHINX_LIBRARIES ${POCKETSPHINX_BINARY_DIR}/src/libpocketsphinx/.libs/libpocketsphinx.a)
+    INCLUDE_DIRECTORIES(${POCKETSPHINX_SOURCE_DIR}/include/)
     SET(DEPENDENCIES ${DEPENDENCIES} pocketsphinx)
+    add_definitions( -DMODELDIR="${POCKETSPHINX_BINARY_DIR}/model")
 endif ()
 SET(LIBS ${LIBS} ${POCKETSPHINX_LIBRARIES})
-INCLUDE_DIRECTORIES(${POCKETSPHINX_INCLUDE_DIR}/pocketsphinx/)
 
 FIND_PACKAGE(PortAudio)
 if (${PORTAUDIO_FOUND})
@@ -104,6 +109,7 @@ else ()
 		BUILD_COMMAND       ${MAKE}
 		UPDATE_COMMAND      ""
 		INSTALL_COMMAND     ""
+        BUILD_IN_SOURCE     ON
 		LOG_DOWNLOAD        ON
 		LOG_UPDATE          ON
 		LOG_CONFIGURE       ON
@@ -130,6 +136,7 @@ ExternalProject_Add(
 	SOURCE_DIR          ${CMAKE_CURRENT_SOURCE_DIR}/lib/parcel
 	UPDATE_COMMAND      ""
 	INSTALL_COMMAND     ""
+    BUILD_IN_SOURCE     ON
 	LOG_DOWNLOAD        ON
 	LOG_UPDATE          ON
 	LOG_CONFIGURE       ON
@@ -160,6 +167,7 @@ else ()
 		BUILD_COMMAND       ${MAKE}
 		UPDATE_COMMAND      ""
 		INSTALL_COMMAND     ""
+        BUILD_IN_SOURCE     ON
 		LOG_DOWNLOAD        ON
 		LOG_UPDATE          ON
 		LOG_CONFIGURE       ON
@@ -194,6 +202,7 @@ else ()
         BUILD_COMMAND       ${MAKE}
         UPDATE_COMMAND      ""
         INSTALL_COMMAND     ""
+        BUILD_IN_SOURCE     ON
         LOG_DOWNLOAD        ON
         LOG_UPDATE          ON
         LOG_CONFIGURE       ON
@@ -216,13 +225,14 @@ if(${LIBSNDFILE_FOUND})
 else ()
 	ExternalProject_Add(
 		LibSndFile
-		DEPENDS FLAC
+		DEPENDS             FLAC
 		URL                 "http://www.mega-nerd.com/libsndfile/files/libsndfile-1.0.25.tar.gz"
 		CONFIGURE_COMMAND   ${CMAKE_CURRENT_SOURCE_DIR}/lib/LibSndFile/configure --prefix=<INSTALL_DIR>
 		BUILD_COMMAND       ${MAKE}
 		SOURCE_DIR          ${CMAKE_CURRENT_SOURCE_DIR}/lib/LibSndFile
 		UPDATE_COMMAND      ""
 		INSTALL_COMMAND     ""
+        BUILD_IN_SOURCE     ON
 		LOG_DOWNLOAD        ON
 		LOG_UPDATE          ON
 		LOG_CONFIGURE       ON
@@ -240,10 +250,11 @@ message(STATUS "Could not find tritium.  This dependency will be downloaded.")
 ExternalProject_Add(
     tritium
     GIT_REPOSITORY  "https://github.com/syb0rg/tritium.git"
-    GIT_TAG         "d9282c77d874962caedaf6083132615cbeee3a7d"
+    GIT_TAG         "9eb6b9884f3b8d46c9f638833fe2ffc2489955ca"
     SOURCE_DIR      ${CMAKE_CURRENT_SOURCE_DIR}/lib/tritium
     UPDATE_COMMAND  ""
     INSTALL_COMMAND ""
+    BUILD_IN_SOURCE ON
     LOG_DOWNLOAD    ON
     LOG_UPDATE      ON
     LOG_CONFIGURE   ON

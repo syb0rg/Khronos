@@ -6,6 +6,7 @@
     - libtool
     - autoconf
     - automake
+* man document
 * Run pahole to optimize data structure layouts
 * getopt() implementation?
 * Stanalone OS

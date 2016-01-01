@@ -7,7 +7,7 @@
 #include <errno.h>
 #include <fcntl.h>
 #include <limits.h>
-#include <pocketsphinx/pocketsphinx.h>
+#include <pocketsphinx.h>
 #include <portaudio.h>
 #include <sphinxbase/err.h>
 #include <stdlib.h>
@@ -21,9 +21,6 @@
 #include "color.h"
 #include "parcel.h"
 #include "util.h"
-
-// TODO: make more portable
-#define MODELDIR "/usr/local/share/pocketsphinx/model"
 
 cst_voice *register_cmu_us_rms(const char *str);
 
