@@ -104,7 +104,7 @@ int processStream(PaStream *stream, AudioData *data, AudioSnippet *sampleBlock, 
     if (err) return err;
     else if(rms(sampleBlock->snippet, FRAMES_PER_BUFFER) > TALKING_THRESHOLD) // talking
     {
-        printf("You're talking! %d\n", i);
+        if (i == 0) puts("Listening!");
         i++;
         time(&talking);
         data->recordedSamples = realloc(data->recordedSamples, sampleBlock->size * i);

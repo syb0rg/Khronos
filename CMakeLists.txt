@@ -27,8 +27,6 @@ if (DOXYGEN_FOUND)
 		)
 endif ()
 
-FIND_PACKAGE(PkgConfig)
-
 FIND_PACKAGE(sphinxbase)
 if (${SPHINXBASE_FOUND})
     INCLUDE_DIRECTORIES(${SPHINXBASE_INCLUDE_DIR}/sphinxbase/)
@@ -152,38 +150,6 @@ INCLUDE_DIRECTORIES(${PARCEL_SOURCE_DIR})
 SET(PARCEL_LIBRARIES ${PARCEL_BINARY_DIR}/libparcel.a)
 SET(DEPENDENCIES ${DEPENDENCIES} parcel)
 SET(LIBS ${LIBS} ${PARCEL_LIBRARIES})
-
-FIND_PACKAGE(CURL)
-if (${CURL_FOUND})
-else ()
-	message(STATUS "Could not find libcurl.  This dependency will be downloaded.")
-	ExternalProject_Add(
-		libcurl
-		GIT_REPOSITORY      "git://github.com/bagder/curl.git"
-		GIT_TAG             "1b6bc02fb926403f04061721f9159e9887202a96"
-		SOURCE_DIR          ${CMAKE_CURRENT_SOURCE_DIR}/lib/curl
-        PATCH_COMMAND       ${CMAKE_CURRENT_SOURCE_DIR}/lib/curl/buildconf
-        CONFIGURE_COMMAND   ${CMAKE_CURRENT_SOURCE_DIR}/lib/curl/configure --prefix=<INSTALL_DIR>
-		BUILD_COMMAND       ${MAKE}
-		UPDATE_COMMAND      ""
-		INSTALL_COMMAND     ""
-        BUILD_IN_SOURCE     ON
-		LOG_DOWNLOAD        ON
-		LOG_UPDATE          ON
-		LOG_CONFIGURE       ON
-		LOG_BUILD           ON
-		LOG_TEST            ON
-		LOG_INSTALL         ON
-	)
-	ExternalProject_Get_Property(libcurl SOURCE_DIR)
-	ExternalProject_Get_Property(libcurl BINARY_DIR)
-	SET(CURL_SOURCE_DIR ${SOURCE_DIR})
-	SET(CURL_BINARY_DIR ${BINARY_DIR})
-	SET(CURL_LIBRARIES ${CURL_BINARY_DIR}/lib/.libs/libcurl.dylib)
-	INCLUDE_DIRECTORIES(${CURL_SOURCE_DIR})
-	SET(DEPENDENCIES ${DEPENDENCIES} libcurl)
-endif ()
-SET(LIBS ${LIBS} ${CURL_LIBRARIES})
 
 #FIND_PACKAGE(LibOgg)
 

@@ -85,7 +85,6 @@ int runKhronos(PaStream *stream, AudioData *data, AudioSnippet *sampleBlock, ps_
     else if (sampleComplete)
     {
         const char *text = recognizeFromFile(ps, fileName);
-        
         if (text) fprintf(stdout, "Recognized text: %s\n", text);
         else puts(RED_TEXT("No text recognized."));
         if (text)

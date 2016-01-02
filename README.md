@@ -23,9 +23,7 @@ This is a list of the required libraries Khronos needs in order to compile prope
  - LibSndFile: a library for reading and writing files containing sampled audio data.
  
  - PortAudio: a portable audio I/O library.
- 
- - cURL: transfers data from or to a server.
- 
+
  - parcel: an efficient and functional JSON parser.
  
  If CMake is installed and run, it will handle the downloading of all of the other dependencies (if they are not already installed on the system).
