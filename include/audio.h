@@ -34,7 +34,7 @@ typedef struct
     float *snippet;
 } __attribute__((__packed__)) AudioSnippet;
 
-long storeFLAC(AudioData *data, int fd);
+long storeWAV(AudioData *data, int fd);
 AudioData* allocAudioData();
 void freeAudioData(AudioData **data);
 int init(PaStream **stream, AudioData *data, AudioSnippet *sampleBlock);

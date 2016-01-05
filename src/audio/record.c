@@ -44,7 +44,7 @@ float rms(float *data, size_t len)
     return sqrt(sum / len);
 }
 
-long storeFLAC(AudioData *data, int fd)
+long storeWAV(AudioData *data, int fd)
 {
     uint8_t err = SF_ERR_NO_ERROR;
     SF_INFO sfinfo =
@@ -128,7 +128,7 @@ int processStream(PaStream *stream, AudioData *data, AudioSnippet *sampleBlock, 
         if (test >= 1.5 && test <= 10 && data->recordedSamples)
         {
             if (sampleComplete) *sampleComplete = true;
-            storeFLAC(data, fd);
+            storeWAV(data, fd);
             talking = 0;
             free(data->recordedSamples);
             data->recordedSamples = NULL;
