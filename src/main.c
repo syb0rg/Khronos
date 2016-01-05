@@ -116,8 +116,32 @@ int runKhronos(PaStream *stream, AudioData *data, AudioSnippet *sampleBlock, ps_
     return err;
 }
 
-int main(int argc, char *argv[])
+static int parseArgs(int argc, char **argv)
 {
+    while (argc--)
+    {
+        if (streq("--help", argv[argc]) || streq("-h", argv[argc]) || streq("help", argv[argc]))
+        {
+            puts(printHelp());
+            exit(EXIT_SUCCESS);
+        }
+        if (streq("--version", argv[argc]) || streq("-v", argv[argc]) || streq("version", argv[argc]))
+        {
+            puts(printVersionInfo());
+            exit(EXIT_SUCCESS);
+        }
+        if (streq("--say", argv[argc]) || streq("-s", argv[argc]) || streq("say", argv[argc]))
+        {
+            say(argv[argc + 1]);
+            exit(EXIT_SUCCESS);
+        }
+    }
+    return 0;
+}
+
+int main(int argc, char **argv)
+{
+    int err = 0;
     srand ((unsigned) time(NULL));
     
     // turn off pocketsphinx output
@@ -125,25 +149,14 @@ int main(int argc, char *argv[])
     err_set_debug_level(0);
     
     // handle command line arguments
-    while (argc--)
+    if (argc > 1)
     {
-        if (streq("--help", argv[argc]) || streq("-h", argv[argc]) || streq("help", argv[argc]))
+        if ((err = parseArgs(argc, argv)))
         {
-            puts(printHelp());
-            return 0;
-        }
-        if (streq("--version", argv[argc]) || streq("-v", argv[argc]) || streq("version", argv[argc]))
-        {
-            puts(printVersionInfo());
-            return 0;
-        }
-        if (streq("--say", argv[argc]) || streq("-s", argv[argc]) || streq("say", argv[argc]))
-        {
-            say(argv[argc + 1]);
-            return 0;
+            fprintf(stderr, "Error parsing command line arguments.\n");
+            return err;
         }
     }
-    
     // initialize pocketsphinx stuff
     cmd_ln_t *config = cmd_ln_init(NULL, ps_args(), TRUE,
                                    "-hmm", MODELDIR "/en-us/en-us",
@@ -171,8 +184,9 @@ int main(int argc, char *argv[])
                                   });
     
     PaStream *stream = NULL;
-    PaError err = init(&stream, data, sampleBlock);
+    err = init(&stream, data, sampleBlock);
     
+    // main program loop
     while (!err)
     {
         err = runKhronos(stream, data, sampleBlock, ps);
