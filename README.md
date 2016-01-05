@@ -6,11 +6,9 @@ Khronos is an intellegent program that utilizes speech recognition to carry out 
 
 ### How Khronos Works 
 
-The process starts off by recording a `.flac` file with the help of LibSndFile and PortAudio working together.  PortAudio scans for the default input device (set by your operating system), and starts the audio recording process.  Once finished, PortAudio passes along the raw PCM data that was just recorded to LibSndFile, which performs the necessary instructions to store it in a `.flac` file.  
+The process starts off by recording a `.wav` file with the help of LibSndFile and PortAudio working together.  PortAudio scans for the default input device (set by your operating system), and starts the audio recording process.  Once finished, PortAudio passes along the raw PCM data that was just recorded to LibSndFile, which performs the necessary instructions to store it in a `.wav` file.  
 
-This `.flac` file is then sent off to Google for speech processing.  We specify what the sample rate is of the audio, and what sort of response we would like back from Google (JSON, XML, etc.).  Google sends back a nicely packed JSON file for processing to extract what was said during the recording.  This processing is done with my custom JSON parser that has proven to be faster when compared to the benchmarks of other JSON parsers.
-
-Khronos then takes this processed information and responds to it in an approprate way with it's own speech synthesis software.
+This `.wav` file is then given to pocketsphinx for speech processing, which then returns the said text with reasonable accuracy. Khronos then takes this processed information and responds to it in an approprate way with it's [own speech synthesis software](https://syb0rg.github.io/tritium.io/).
 
 ---
 
@@ -20,11 +18,15 @@ This is a list of the required libraries Khronos needs in order to compile prope
 
  - CMake (version 2.8.7 minimum): a portable Makefile generator.
  
- - LibSndFile: a library for reading and writing files containing sampled audio data.
+ - LibSndFile: a library for reading and writing files containing sampled audio data.  This library has a subdependecy on the FLAC library.
  
  - PortAudio: a portable audio I/O library.
 
- - parcel: an efficient and functional JSON parser.
+ - sphinxbase: the basic libraries shared by the CMU Sphinx trainer and all the Sphinx decoders
+
+ - pocketsphinx: open source large vocabulary, speaker-independent continuous speech recognition engine
+
+ - tritium: a free, premium quality speech synthesis engine written completely in C.
  
  If CMake is installed and run, it will handle the downloading of all of the other dependencies (if they are not already installed on the system).
 
