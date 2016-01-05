@@ -125,32 +125,6 @@ else ()
 endif ()
 SET(LIBS ${LIBS} ${PORTAUDIO_LIBRARIES})
 
-# TODO: create FindParcel.cmake
-message(STATUS "Could not find parcel.  This dependency will be downloaded.")
-ExternalProject_Add(
-	parcel
-	GIT_REPOSITORY      "https://github.com/syb0rg/parcel.git"
-	GIT_TAG             "c2fd447cd2af552021304e64b6bd66c88c170241"
-	SOURCE_DIR          ${CMAKE_CURRENT_SOURCE_DIR}/lib/parcel
-	UPDATE_COMMAND      ""
-	INSTALL_COMMAND     ""
-    BUILD_IN_SOURCE     ON
-	LOG_DOWNLOAD        ON
-	LOG_UPDATE          ON
-	LOG_CONFIGURE       ON
-	LOG_BUILD           ON
-	LOG_TEST            ON
-	LOG_INSTALL         ON
-)
-ExternalProject_Get_Property(parcel SOURCE_DIR)
-ExternalProject_Get_Property(parcel BINARY_DIR)
-SET(PARCEL_SOURCE_DIR ${SOURCE_DIR})
-SET(PARCEL_BINARY_DIR ${BINARY_DIR})
-INCLUDE_DIRECTORIES(${PARCEL_SOURCE_DIR})
-SET(PARCEL_LIBRARIES ${PARCEL_BINARY_DIR}/libparcel.a)
-SET(DEPENDENCIES ${DEPENDENCIES} parcel)
-SET(LIBS ${LIBS} ${PARCEL_LIBRARIES})
-
 #FIND_PACKAGE(LibOgg)
 
 #FIND_PACKAGE(LibVorbis)
