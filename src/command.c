@@ -32,7 +32,6 @@ const char* printVersionInfo(void)
 	fprintf(stdout, "Khronos submodule version information:\n");
 	fprintf(stdout, "\t- %s\n", Pa_GetVersionText());
 	fprintf(stdout, "\t- %s (%s) %s\n", TRITIUM_PROJECT_NAME, TRITIUM_PROJECT_PREFIX, TRITIUM_PROJECT_VERSION);
-	fprintf(stdout, "\t- libcurl %s (built %s)\n", LIBCURL_VERSION, LIBCURL_TIMESTAMP);
 	fprintf(stdout, "\t- %s\n", sf_version_string());
 	return "";
 }
