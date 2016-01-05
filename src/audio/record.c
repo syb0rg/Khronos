@@ -20,7 +20,7 @@ AudioData* allocAudioData()
     AudioData *data = malloc(sizeof(AudioData));
     data->formatType = paFloat32;
     data->numChannels = 0;
-    data->sampleRate = 44100;
+    data->sampleRate = 16000;  // must be 16kHz for sphinx
     data->size = 0;
     data->recordedSamples = NULL;
     return data;
@@ -75,7 +75,7 @@ int init(PaStream **stream, AudioData *data, AudioSnippet *sampleBlock)
     if (err) return err;
     
     const PaDeviceInfo *info = Pa_GetDeviceInfo(Pa_GetDefaultInputDevice());
-    data->numChannels = info->maxInputChannels;
+    data->numChannels = 1; //info->maxInputChannels; -> must be mono for sphinx
     PaStreamParameters inputParameters =
     {
         .device = Pa_GetDefaultInputDevice(),
@@ -104,7 +104,7 @@ int processStream(PaStream *stream, AudioData *data, AudioSnippet *sampleBlock, 
     if (err) return err;
     else if(rms(sampleBlock->snippet, FRAMES_PER_BUFFER) > TALKING_THRESHOLD) // talking
     {
-        if (i == 0) puts("Listening!");
+        printf("Listening: %d\n", i);
         i++;
         time(&talking);
         data->recordedSamples = realloc(data->recordedSamples, sampleBlock->size * i);
