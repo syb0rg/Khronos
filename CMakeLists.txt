@@ -31,7 +31,6 @@ FIND_PACKAGE(sphinxbase)
 if (${SPHINXBASE_FOUND})
     INCLUDE_DIRECTORIES(${SPHINXBASE_INCLUDE_DIR}/sphinxbase/)
 else ()
-    message(STATUS "Could not find sphinxbase.  This dependency will be downloaded.")
     ExternalProject_Add(
         sphinxbase
         GIT_REPOSITORY      "https://github.com/cmusphinx/sphinxbase.git"
@@ -55,8 +54,8 @@ else ()
     SET(SPHINXBASE_BINARY_DIR ${BINARY_DIR})
     SET(SPHINXBASE_LIBRARIES ${SPHINXBASE_BINARY_DIR}/src/libsphinxbase/.libs/libsphinxbase.a)
     INCLUDE_DIRECTORIES(${SPHINXBASE_SOURCE_DIR}/include)
-    SET(DEPENDENCIES ${DEPENDENCIES} sphinxbase)
 endif ()
+SET(DEPENDENCIES ${DEPENDENCIES} sphinxbase)
 SET(LIBS ${LIBS} ${SPHINXBASE_LIBRARIES})
 
 FIND_PACKAGE(pocketsphinx)
@@ -64,7 +63,6 @@ if (${POCKETSPHINX_FOUND})
     INCLUDE_DIRECTORIES(${POCKETSPHINX_INCLUDE_DIR}/pocketsphinx/)
     add_definitions( -DMODELDIR="/usr/local/share/pocketsphinx/model")  # more portable?
 else ()
-    message(STATUS "Could not find pocketsphinx.  This dependency will be downloaded.")
     ExternalProject_Add(
         pocketsphinx
         DEPENDS             sphinxbase
@@ -89,15 +87,15 @@ else ()
     SET(POCKETSPHINX_BINARY_DIR ${BINARY_DIR})
     SET(POCKETSPHINX_LIBRARIES ${POCKETSPHINX_BINARY_DIR}/src/libpocketsphinx/.libs/libpocketsphinx.a)
     INCLUDE_DIRECTORIES(${POCKETSPHINX_SOURCE_DIR}/include/)
-    SET(DEPENDENCIES ${DEPENDENCIES} pocketsphinx)
     add_definitions( -DMODELDIR="${POCKETSPHINX_BINARY_DIR}/model")
 endif ()
+SET(DEPENDENCIES ${DEPENDENCIES} pocketsphinx)
 SET(LIBS ${LIBS} ${POCKETSPHINX_LIBRARIES})
 
 FIND_PACKAGE(PortAudio)
 if (${PORTAUDIO_FOUND})
+    INCLUDE_DIRECTORIES(${PORTAUDIO_INCLUDE_DIRS})
 else ()
-	MESSAGE(STATUS "Could not find PortAudio.  This dependency will be downloaded.")
 	ExternalProject_Add(
 		PortAudio
 		SVN_REPOSITORY      "https://subversion.assembla.com/svn/portaudio/portaudio/trunk/"
@@ -121,53 +119,18 @@ else ()
 	SET(PORTAUDIO_BINARY_DIR ${BINARY_DIR})
 	SET(PORTAUDIO_LIBRARIES ${PORTAUDIO_BINARY_DIR}/lib/.libs/libportaudio.dylib)
 	INCLUDE_DIRECTORIES(${PORTAUDIO_SOURCE_DIR})
-	SET(DEPENDENCIES ${DEPENDENCIES} PortAudio)
 endif ()
+#SET(DEPENDENCIES ${DEPENDENCIES} PortAudio)
 SET(LIBS ${LIBS} ${PORTAUDIO_LIBRARIES})
-
-#FIND_PACKAGE(LibOgg)
-
-#FIND_PACKAGE(LibVorbis)
-
-FIND_PACKAGE(FLAC)
-if (${FLAC_FOUND})
-else ()
-    ExternalProject_Add(
-        FLAC
-        GIT_REPOSITORY      "git://github.com/xiph/flac.git"
-        GIT_TAG             "0e11f73eabd3544f59937d0a0d8e076d7c9c2d1d"
-        SOURCE_DIR          ${CMAKE_CURRENT_SOURCE_DIR}/lib/flac
-        PATCH_COMMAND       ${CMAKE_CURRENT_SOURCE_DIR}/lib/flac/autogen.sh
-        CONFIGURE_COMMAND   ${CMAKE_CURRENT_SOURCE_DIR}/lib/flac/configure --prefix=<INSTALL_DIR>
-        BUILD_COMMAND       ${MAKE}
-        UPDATE_COMMAND      ""
-        INSTALL_COMMAND     ""
-        BUILD_IN_SOURCE     ON
-        LOG_DOWNLOAD        ON
-        LOG_UPDATE          ON
-        LOG_CONFIGURE       ON
-        LOG_BUILD           ON
-        LOG_TEST            ON
-        LOG_INSTALL         ON
-    ExternalProject_Get_Property(FLAC SOURCE_DIR)
-    ExternalProject_Get_Property(FLAC BINARY_DIR)
-    SET(FLAC_SOURCE_DIR ${SOURCE_DIR})
-    SET(FLAC_BINARY_DIR ${BINARY_DIR})
-    SET(FLAC_LIBRARIES ${FLAC_BINARY_DIR}/lib/.libs/libFLAC.dylib)
-    INCLUDE_DIRECTORIES(${FLAC_SOURCE_DIR})
-    SET(DEPENDENCIES ${DEPENDENCIES} libFLAC)
-    )
-endif ()
-SET(LIBS ${LIBS} ${FLAC_LIBRARIES})
 
 FIND_PACKAGE(LibSndFile)
 if(${LIBSNDFILE_FOUND})
+    INCLUDE_DIRECTORIES(${LIBSNDFILE_INCLUDE_DIRS})
 else ()
 	ExternalProject_Add(
 		LibSndFile
-		DEPENDS             FLAC
-		URL                 "http://www.mega-nerd.com/libsndfile/files/libsndfile-1.0.25.tar.gz"
-		CONFIGURE_COMMAND   ${CMAKE_CURRENT_SOURCE_DIR}/lib/LibSndFile/configure --prefix=<INSTALL_DIR>
+		URL                 "http://www.mega-nerd.com/libsndfile/files/libsndfile-1.0.26.tar.gz"
+		CONFIGURE_COMMAND   ${CMAKE_CURRENT_SOURCE_DIR}/lib/LibSndFile/configure --prefix=<INSTALL_DIR> --disable-external-libs
 		BUILD_COMMAND       ${MAKE}
 		SOURCE_DIR          ${CMAKE_CURRENT_SOURCE_DIR}/lib/LibSndFile
 		UPDATE_COMMAND      ""
@@ -180,17 +143,21 @@ else ()
 		LOG_TEST            ON
 		LOG_INSTALL         ON
 	)
-    SET(DEPENDENCIES ${DEPENDENCIES} LibSndFile)
+    ExternalProject_Get_Property(LibSndFile SOURCE_DIR)
+    ExternalProject_Get_Property(LibSndFile BINARY_DIR)
+    SET(LIBSNDFILE_SOURCE_DIR ${SOURCE_DIR}/src)
+    SET(LIBSNDFILE_BINARY_DIR ${BINARY_DIR})
+    SET(LIBSNDFILE_LIBRARIES ${LIBSNDFILE_BINARY_DIR}/src/.libs/libsndfile.a)
+    INCLUDE_DIRECTORIES(${LIBSNDFILE_SOURCE_DIR})
 endif ()
+SET(DEPENDENCIES ${DEPENDENCIES} LibSndFile)
 SET(LIBS ${LIBS} ${LIBSNDFILE_LIBRARIES})
-INCLUDE_DIRECTORIES(${LIBSNDFILE_INCLUDE_DIRS})
 
 # TODO: create FindTritium.cmake
-message(STATUS "Could not find tritium.  This dependency will be downloaded.")
 ExternalProject_Add(
     tritium
     GIT_REPOSITORY  "https://github.com/syb0rg/tritium.git"
-    GIT_TAG         "9eb6b9884f3b8d46c9f638833fe2ffc2489955ca"
+    GIT_TAG         "f6cd6a750945373b48c05c0f2d682e478e6a719d"
     SOURCE_DIR      ${CMAKE_CURRENT_SOURCE_DIR}/lib/tritium
     UPDATE_COMMAND  ""
     INSTALL_COMMAND ""
@@ -206,7 +173,7 @@ ExternalProject_Get_Property(tritium SOURCE_DIR)
 ExternalProject_Get_Property(tritium BINARY_DIR)
 SET(TRITIUM_SOURCE_DIR ${SOURCE_DIR})
 SET(TRITIUM_BINARY_DIR ${BINARY_DIR})
-INCLUDE_DIRECTORIES(${SOURCE_DIR}/include)
+INCLUDE_DIRECTORIES(${TRITIUM_SOURCE_DIR}/include)
 SET(TRITIUM_LIBRARIES ${TRITIUM_BINARY_DIR}/libtritium.a)
 SET(LIBS ${LIBS} ${TRITIUM_LIBRARIES})
 SET(DEPENDENCIES ${DEPENDENCIES} tritium)

@@ -13,13 +13,12 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <time.h>
-#include <tritium/tritium.h>
+#include <tritium.h>
 #include <unistd.h>
 
 #include "audio.h"
 #include "command.h"
 #include "color.h"
-#include "parcel.h"
 #include "util.h"
 
 cst_voice *register_cmu_us_rms(const char *str);

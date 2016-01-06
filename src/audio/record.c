@@ -4,6 +4,7 @@
  */
 
 #include <math.h>
+#include <portaudio.h>
 #include <sndfile.h>
 #include <stdio.h>
 #include <stdlib.h>

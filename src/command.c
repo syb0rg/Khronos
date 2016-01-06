@@ -1,10 +1,9 @@
 #include <time.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <tritium/tritium_version.h>
+#include <tritium_version.h>
 #include <portaudio.h>
 #include <sndfile.h>
-#include <curl/curlver.h>
 
 #include "command.h"
 #include "color.h"
