@@ -17,3 +17,4 @@
 * Integrate weather API
 * Offline speech recognition
 * Implement better random number generator (PCG library)
+* mqtt?
