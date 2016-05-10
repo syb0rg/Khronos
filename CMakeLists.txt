@@ -212,5 +212,6 @@ ADD_EXECUTABLE(${PROJECT_NAME}
         )
 TARGET_LINK_LIBRARIES(${PROJECT_NAME} ${LIBS})
 if (DEPENDENCIES)
+    MESSAGE (STATUS "Any missing dependencies will be downloaded upon running \"make\"")
     ADD_DEPENDENCIES(${PROJECT_NAME} ${DEPENDENCIES})
 endif ()
