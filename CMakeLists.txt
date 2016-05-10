@@ -176,7 +176,7 @@ else ()
     ExternalProject_Add(
         tritium
         GIT_REPOSITORY  "https://github.com/syb0rg/tritium.git"
-        GIT_TAG         "f6cd6a750945373b48c05c0f2d682e478e6a719d"
+        GIT_TAG         "58c8be27683aeb855462bfd29c4ecdc048afc8fa"
         SOURCE_DIR      ${CMAKE_CURRENT_SOURCE_DIR}/lib/tritium
         UPDATE_COMMAND  ""
         INSTALL_COMMAND ""

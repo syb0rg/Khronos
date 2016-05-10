@@ -27,10 +27,17 @@ int createSafeFileDescriptor(const char* fileRoot)
 
 const char* getPathFromDescriptor(int fd)
 {
-    char* filePath = malloc(PATH_MAX);
-    if (fcntl(fd, F_GETPATH, filePath) != -1)
-    {
-        return filePath;
-    }
+    char *filename = malloc(PATH_MAX);
+#ifdef __APPLE__
+    if (fcntl(fd, F_GETPATH, filename) != -1) return filename;
     return NULL;
+#endif
+#ifdef __unix__
+    char proclnk[PATH_MAX] = {0};
+    ssize_t r = -1;
+    snprintf(proclnk, sizeof(proclnk), "/proc/self/fd/%d", fd);  // make more portable
+    if ((r = readlink(proclnk, filename, PATH_MAX)) < 0) return NULL;
+    filename[r] = '\0';
+    return filename;
+#endif
 }
