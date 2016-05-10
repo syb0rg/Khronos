@@ -42,15 +42,28 @@ static const char* recognizeFromFile(ps_decoder_t *ps, const char* fileName)
     }
     
     // verify .wav file?  I trust libsndfile to make a valid one
-    ps_start_utt(ps, NULL);
+    ps_start_utt(ps);
+    bool uttStarted = false;
     
     while ((k = fread(adbuf, sizeof(int16), 2048, file)) > 0)
     {
         ps_process_raw(ps, adbuf, k, false, false);
+        bool inSpeech = ps_get_in_speech(ps);
+        if (inSpeech && !uttStarted) uttStarted = true;
+        if (!inSpeech && uttStarted)
+        {
+            ps_end_utt(ps);
+            hyp = ps_get_hyp(ps, NULL);
+            ps_start_utt(ps);
+            uttStarted = false;
+        }
     }
-    
     ps_end_utt(ps);
-    hyp = ps_get_hyp(ps, NULL, NULL);
+    
+    if (uttStarted)
+    {
+        hyp = ps_get_hyp(ps, NULL);
+    }
     
     fclose(file);
     return hyp;
@@ -143,7 +156,7 @@ int main(int argc, char **argv)
         }
     }
     // initialize pocketsphinx stuff
-    cmd_ln_t *config = cmd_ln_init(NULL, ps_args(), TRUE,
+    cmd_ln_t *config = cmd_ln_init(NULL, ps_args(), true,
                                    "-hmm", MODELDIR "/en-us/en-us",
                                    "-lm", MODELDIR "/en-us/en-us.lm.bin",
                                    "-dict", MODELDIR "/en-us/cmudict-en-us.dict",
@@ -156,7 +169,7 @@ int main(int argc, char **argv)
     ps_decoder_t *ps = ps_init(config);
     if (!ps)
     {
-        fprintf(stderr, "Failed to create recognizer, see log for details\n");
+        fprintf(stderr, "Failed to create recognizer, please update CMU Sphinx software\n");
         return -1;
     }
     
@@ -181,8 +194,9 @@ int main(int argc, char **argv)
     freeAudioData(&data);
     free(sampleBlock->snippet);
     free(stream);
-    Pa_Terminate();
     ps_free(ps);
+    cmd_ln_free_r(config);
+    Pa_Terminate();
     puts(Pa_GetErrorText(err));
     return err;
 }
