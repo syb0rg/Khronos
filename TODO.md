@@ -14,6 +14,6 @@
     - bootloader (GRUB)
 * Accept more command line arguments
 * Integrate Words API
-* Integrate weather API
+* Integrate weather API (wunderground)
 * Implement better random number generator (PCG library)
 * mqtt?
