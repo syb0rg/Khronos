@@ -9,7 +9,7 @@
 find_path(POCKETSPHINX_INCLUDE_DIR pocketsphinx/pocketsphinx.h)
 
 # Library
-find_library(POCKETSPHINX_LIBRARY libpocketsphinx.a)
+find_library(POCKETSPHINX_LIBRARY pocketsphinx)
 
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(pocketsphinx DEFAULT_MSG POCKETSPHINX_LIBRARY POCKETSPHINX_INCLUDE_DIR)

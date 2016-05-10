@@ -5,12 +5,6 @@
 #  LIBSNDFILE_INCLUDE_DIRS - the libsndfile include directories
 #  LIBSNDFILE_LIBRARIES - link these to use libsndfile
 
-# Use pkg-config to get hints about paths
-find_package(PkgConfig QUIET)
-if(PKG_CONFIG_FOUND)
-    pkg_check_modules(LIBSNDFILE_PKGCONF sndfile)
-endif(PKG_CONFIG_FOUND)
-
 # Include dir
 find_path(LIBSNDFILE_INCLUDE_DIR
 NAMES sndfile.h

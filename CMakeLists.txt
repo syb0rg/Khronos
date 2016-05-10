@@ -1,3 +1,7 @@
+#
+# Initial CMake and project setup
+#
+
 CMAKE_MINIMUM_REQUIRED(VERSION 3.0.2)
 INCLUDE(ExternalProject)
 SET(PROJECT_NAME Khronos)
@@ -5,6 +9,10 @@ PROJECT(${PROJECT_NAME})
 SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
 SET_DIRECTORY_PROPERTIES(PROPERTIES EP_PREFIX ${CMAKE_BINARY_DIR}/library-build)
 SET(CMAKE_C_FLAGS "-std=gnu11 -O3 -fprofile-arcs -ftest-coverage")
+
+#
+# Setup GCC flags
+#
 
 if (GCC_VERSION VERSION_GREATER "4.8")
 elsif (GCC_VERSION VERSION_GREATER "4.1.2")
@@ -17,6 +25,10 @@ else ()
 	SET(GCC_CXX_WARNING_FLAGS "-Wctor-dtor-privacy")
 endif ()
 
+#
+# Find Doxygen for documentation
+#
+
 # add a target to generate API documentation with Doxygen
 FIND_PACKAGE(Doxygen)
 if (DOXYGEN_FOUND)
@@ -26,6 +38,10 @@ if (DOXYGEN_FOUND)
 		COMMENT "Generating API documentation with Doxygen" VERBATIM
 		)
 endif ()
+
+#
+# Find/install dependencies
+#
 
 FIND_PACKAGE(sphinxbase)
 if (${SPHINXBASE_FOUND})
@@ -53,9 +69,9 @@ else ()
     SET(SPHINXBASE_SOURCE_DIR ${SOURCE_DIR})
     SET(SPHINXBASE_BINARY_DIR ${BINARY_DIR})
     SET(SPHINXBASE_LIBRARIES ${SPHINXBASE_BINARY_DIR}/src/libsphinxbase/.libs/libsphinxbase.a)
+    SET(DEPENDENCIES ${DEPENDENCIES} sphinxbase)
     INCLUDE_DIRECTORIES(${SPHINXBASE_SOURCE_DIR}/include)
 endif ()
-SET(DEPENDENCIES ${DEPENDENCIES} sphinxbase)
 SET(LIBS ${LIBS} ${SPHINXBASE_LIBRARIES})
 
 FIND_PACKAGE(pocketsphinx)
@@ -86,10 +102,10 @@ else ()
     SET(POCKETSPHINX_SOURCE_DIR ${SOURCE_DIR})
     SET(POCKETSPHINX_BINARY_DIR ${BINARY_DIR})
     SET(POCKETSPHINX_LIBRARIES ${POCKETSPHINX_BINARY_DIR}/src/libpocketsphinx/.libs/libpocketsphinx.a)
+    SET(DEPENDENCIES ${DEPENDENCIES} pocketsphinx)
     INCLUDE_DIRECTORIES(${POCKETSPHINX_SOURCE_DIR}/include/)
     add_definitions( -DMODELDIR="${POCKETSPHINX_BINARY_DIR}/model")
 endif ()
-SET(DEPENDENCIES ${DEPENDENCIES} pocketsphinx)
 SET(LIBS ${LIBS} ${POCKETSPHINX_LIBRARIES})
 
 FIND_PACKAGE(PortAudio)
@@ -118,9 +134,9 @@ else ()
 	SET(PORTAUDIO_SOURCE_DIR ${SOURCE_DIR})
 	SET(PORTAUDIO_BINARY_DIR ${BINARY_DIR})
 	SET(PORTAUDIO_LIBRARIES ${PORTAUDIO_BINARY_DIR}/lib/.libs/libportaudio.dylib)
-	INCLUDE_DIRECTORIES(${PORTAUDIO_SOURCE_DIR})
+    SET(DEPENDENCIES ${DEPENDENCIES} PortAudio)
+    INCLUDE_DIRECTORIES(${PORTAUDIO_SOURCE_DIR})
 endif ()
-#SET(DEPENDENCIES ${DEPENDENCIES} PortAudio)
 SET(LIBS ${LIBS} ${PORTAUDIO_LIBRARIES})
 
 FIND_PACKAGE(LibSndFile)
@@ -148,35 +164,43 @@ else ()
     SET(LIBSNDFILE_SOURCE_DIR ${SOURCE_DIR}/src)
     SET(LIBSNDFILE_BINARY_DIR ${BINARY_DIR})
     SET(LIBSNDFILE_LIBRARIES ${LIBSNDFILE_BINARY_DIR}/src/.libs/libsndfile.a)
+    SET(DEPENDENCIES ${DEPENDENCIES} LibSndFile)
     INCLUDE_DIRECTORIES(${LIBSNDFILE_SOURCE_DIR})
 endif ()
-SET(DEPENDENCIES ${DEPENDENCIES} LibSndFile)
 SET(LIBS ${LIBS} ${LIBSNDFILE_LIBRARIES})
 
-# TODO: create FindTritium.cmake
-ExternalProject_Add(
-    tritium
-    GIT_REPOSITORY  "https://github.com/syb0rg/tritium.git"
-    GIT_TAG         "f6cd6a750945373b48c05c0f2d682e478e6a719d"
-    SOURCE_DIR      ${CMAKE_CURRENT_SOURCE_DIR}/lib/tritium
-    UPDATE_COMMAND  ""
-    INSTALL_COMMAND ""
-    BUILD_IN_SOURCE ON
-    LOG_DOWNLOAD    ON
-    LOG_UPDATE      ON
-    LOG_CONFIGURE   ON
-    LOG_BUILD       ON
-    LOG_TEST        ON
-    LOG_INSTALL     ON
-)
-ExternalProject_Get_Property(tritium SOURCE_DIR)
-ExternalProject_Get_Property(tritium BINARY_DIR)
-SET(TRITIUM_SOURCE_DIR ${SOURCE_DIR})
-SET(TRITIUM_BINARY_DIR ${BINARY_DIR})
-INCLUDE_DIRECTORIES(${TRITIUM_SOURCE_DIR}/include)
-SET(TRITIUM_LIBRARIES ${TRITIUM_BINARY_DIR}/libtritium.a)
+FIND_PACKAGE(tritium)
+if (${TRITIUM_FOUND})
+    INCLUDE_DIRECTORIES(${TRITIUM_INCLUDE_DIR}/)
+else ()
+    ExternalProject_Add(
+        tritium
+        GIT_REPOSITORY  "https://github.com/syb0rg/tritium.git"
+        GIT_TAG         "f6cd6a750945373b48c05c0f2d682e478e6a719d"
+        SOURCE_DIR      ${CMAKE_CURRENT_SOURCE_DIR}/lib/tritium
+        UPDATE_COMMAND  ""
+        INSTALL_COMMAND ""
+        BUILD_IN_SOURCE ON
+        LOG_DOWNLOAD    ON
+        LOG_UPDATE      ON
+        LOG_CONFIGURE   ON
+        LOG_BUILD       ON
+        LOG_TEST        ON
+        LOG_INSTALL     ON
+    )
+    ExternalProject_Get_Property(tritium SOURCE_DIR)
+    ExternalProject_Get_Property(tritium BINARY_DIR)
+    SET(TRITIUM_SOURCE_DIR ${SOURCE_DIR})
+    SET(TRITIUM_BINARY_DIR ${BINARY_DIR})
+    SET(TRITIUM_LIBRARIES ${TRITIUM_BINARY_DIR}/libtritium.a)
+    SET(DEPENDENCIES ${DEPENDENCIES} tritium)
+    INCLUDE_DIRECTORIES(${TRITIUM_SOURCE_DIR}/include)
+endif ()
 SET(LIBS ${LIBS} ${TRITIUM_LIBRARIES})
-SET(DEPENDENCIES ${DEPENDENCIES} tritium)
+
+#
+# Final project settings
+#
 
 INCLUDE_DIRECTORIES(include)
 ADD_SUBDIRECTORY(src)
@@ -186,5 +210,8 @@ ADD_EXECUTABLE(${PROJECT_NAME}
         $<TARGET_OBJECTS:util>
         $<TARGET_OBJECTS:main>
         )
-ADD_DEPENDENCIES(${PROJECT_NAME} ${DEPENDENCIES})
+message(STATUS ${LIBS})
 TARGET_LINK_LIBRARIES(${PROJECT_NAME} ${LIBS})
+if (${DEPENDENCIES})
+    ADD_DEPENDENCIES(${PROJECT_NAME} ${DEPENDENCIES})
+endif ()

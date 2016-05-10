@@ -1,7 +1,7 @@
 #include <time.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <tritium_version.h>
+#include <tritium/tritium_version.h>
 #include <portaudio.h>
 #include <sndfile.h>
 

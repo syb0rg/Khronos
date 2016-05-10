@@ -13,7 +13,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <time.h>
-#include <tritium.h>
+#include <tritium/tritium.h>
 #include <unistd.h>
 
 #include "audio.h"
@@ -42,28 +42,15 @@ static const char* recognizeFromFile(ps_decoder_t *ps, const char* fileName)
     }
     
     // verify .wav file?  I trust libsndfile to make a valid one
-    ps_start_utt(ps);
-    bool uttStarted = false;
+    ps_start_utt(ps, NULL);
     
     while ((k = fread(adbuf, sizeof(int16), 2048, file)) > 0)
     {
         ps_process_raw(ps, adbuf, k, false, false);
-        bool inSpeech = ps_get_in_speech(ps);
-        if (inSpeech && !uttStarted) uttStarted = true;
-        if (!inSpeech && uttStarted)
-        {
-            ps_end_utt(ps);
-            hyp = ps_get_hyp(ps, NULL);
-            ps_start_utt(ps);
-            uttStarted = false;
-        }
     }
-    ps_end_utt(ps);
     
-    if (uttStarted)
-    {
-        hyp = ps_get_hyp(ps, NULL);
-    }
+    ps_end_utt(ps);
+    hyp = ps_get_hyp(ps, NULL, NULL);
     
     fclose(file);
     return hyp;
@@ -87,7 +74,6 @@ int runKhronos(PaStream *stream, AudioData *data, AudioSnippet *sampleBlock, ps_
         if (text)
         {
             fprintf(stdout, "Recognized text: %s\n", text);
-            fprintf(stdout, "Confidence: %g%%\n", logmath_exp(ps_get_logmath(ps), ps_get_prob(ps)) * 100);
         }
         else puts(RED_TEXT("No text recognized."));
         if (text)
@@ -196,6 +182,7 @@ int main(int argc, char **argv)
     free(sampleBlock->snippet);
     free(stream);
     Pa_Terminate();
+    ps_free(ps);
     puts(Pa_GetErrorText(err));
     return err;
 }

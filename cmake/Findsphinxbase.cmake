@@ -9,7 +9,7 @@
 find_path(SPHINXBASE_INCLUDE_DIR sphinxbase/cmd_ln.h)
 
 # Library
-find_library(SPHINXBASE_LIBRARY libsphinxbase)
+find_library(SPHINXBASE_LIBRARY sphinxbase)
 
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(sphinxbase DEFAULT_MSG SPHINXBASE_LIBRARY SPHINXBASE_INCLUDE_DIR)
