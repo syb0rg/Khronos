@@ -6,27 +6,27 @@ Khronos is an intellegent program that utilizes speech recognition to carry out 
 
 ### How Khronos Works 
 
-The process starts off by recording a `.wav` file with the help of LibSndFile and PortAudio working together.  PortAudio scans for the default input device (set by your operating system), and starts the audio recording process.  Once finished, PortAudio passes along the raw PCM data that was just recorded to LibSndFile, which performs the necessary instructions to store it in a `.wav` file.  
+The process starts by recording a `.wav` file with LibSndFile and PortAudio.  PortAudio finds the default input device, and starts recording audio.  Once finished, PortAudio passes along the raw PCM data to LibSndFile, which stores it in a `.wav` file.  
 
-This `.wav` file is then given to pocketsphinx for speech processing, which then returns the said text with reasonable accuracy. Khronos then takes this processed information and responds to it in an approprate way with it's [own speech synthesis software](https://syb0rg.github.io/tritium.io/).
+This `.wav` file is passed to pocketsphinx for speech processing, which then returns the spoken text. Khronos takes this text and responds with its [own speech synthesis software](https://syb0rg.github.io/tritium.io/).
 
 ---
 
 ### Dependencies
 
-This is a list of the required libraries Khronos needs in order to compile properly.
+This is a list of the libraries Khronos requires to compile properly.
 
- - CMake (version 2.8.7 minimum): a portable Makefile generator.
+ - [CMake](https://cmake.org/) (version 2.8.7 minimum): a portable Makefile generator.
  
- - LibSndFile: a library for reading and writing files containing sampled audio data.  This library has a subdependecy on the FLAC library.
+ - [LibSndFile](http://www.mega-nerd.com/libsndfile/): a library for reading and writing files containing sampled audio data.
  
- - PortAudio: a portable audio I/O library.
+ - [PortAudio](http://www.portaudio.com/): a portable audio I/O library.
 
- - sphinxbase: the basic libraries shared by the CMU Sphinx trainer and all the Sphinx decoders
+ - [sphinxbase](https://github.com/cmusphinx/sphinxbase): the basic libraries shared by the CMU Sphinx trainer and all the Sphinx decoders
 
- - pocketsphinx: open source large vocabulary, speaker-independent continuous speech recognition engine
+ - [pocketsphinx](https://github.com/cmusphinx/pocketsphinx): open source, large vocabulary, speaker-independent speech recognition engine
 
- - tritium: a free, premium quality speech synthesis engine written completely in C.
+ - [tritium](https://syb0rg.github.io/tritium.io/): a free, premium quality speech synthesis engine written completely in C.
  
  If CMake is installed and run, it will handle the downloading of all of the other dependencies (if they are not already installed on the system).
 
@@ -34,8 +34,8 @@ This is a list of the required libraries Khronos needs in order to compile prope
 
 ### Configuration & Installation
 
-You chould be located in the main source directory in your terminal.  Change your directory into the `build/` folder (it should be empty). If it does not exist then create one. This will be where the final build will be housed through the building process.
+You should be in the main source directory in your terminal.  Change into the `build/` folder (it should be empty, if it does not exist then create it). This will be where the final build will be housed.
 
-Run `cmake ..` and the configuation should begin.  This will create a Makefile tailored for running in your specific environment.  Any dependencies that you do not have will also be noted and flagged for downloading.
+Run `cmake ..` and configuation should begin.  This will create a Makefile tailored for your specific environment.  Any dependencies that you need will be flagged for downloading.
 
-Next run `make`.  Any flagged dependencies will now begin downloading into their own special folder, where they will have to be configured and built so that Khronos can link to their libraries.  Once everything has finished downloading and everything is linked together, the build should be complete.  Now you can run `./Khronos` and the program should start executing.
+Run `make`.  All flagged dependencies will download into their own special folder, where they are configured and built for Khronos to link with.  Once everything has finished downloading and linked together, the build should be complete.  Now you can run `./Khronos`.
