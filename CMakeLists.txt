@@ -120,7 +120,7 @@ else ()
 		CONFIGURE_COMMAND   ${CMAKE_CURRENT_SOURCE_DIR}/lib/PortAudio/configure --prefix=<INSTALL_DIR>
 		BUILD_COMMAND       ${MAKE}
 		UPDATE_COMMAND      ""
-		INSTALL_COMMAND     ""
+        INSTALL_COMMAND     ""
         BUILD_IN_SOURCE     ON
 		LOG_DOWNLOAD        ON
 		LOG_UPDATE          ON

@@ -1,8 +1,11 @@
-#include <fcntl.h>
-#include <limits.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <stdint.h>
+
+#ifndef _WIN32
+#include <fcntl.h>
 #include <unistd.h>
+#endif
 
 #include "util.h"
 
@@ -27,16 +30,32 @@ int createSafeFileDescriptor(const char* fileRoot)
 
 const char* getPathFromDescriptor(int fd)
 {
-    char *filename = malloc(PATH_MAX);
+    char *filename = malloc(FILENAME_MAX);
+#ifdef _WIN32
+    intptr_t file = _get_osfhandle(fd);
+    intptr_t fileMap = CreateFileMapping(file, NULL, PAGE_READONLY, 0, 1, NULL);
+    
+    if (hFileMap)
+    {
+        void* pMem = MapViewOfFile(hFileMap, FILE_MAP_READ, 0, 0, 1);
+        if (pMem)
+        {
+            if (GetMappedFileName(GetCurrentProcess(), pMem, filename, FILENAME_MAX)) return filename;
+        }
+    }
+    return NULL;
+#endif
+    
 #ifdef __APPLE__
     if (fcntl(fd, F_GETPATH, filename) != -1) return filename;
     return NULL;
 #endif
+    
 #ifdef __unix__
     char proclnk[PATH_MAX] = {0};
     ssize_t r = -1;
-    snprintf(proclnk, sizeof(proclnk), "/proc/self/fd/%d", fd);  // make more portable
-    if ((r = readlink(proclnk, filename, PATH_MAX)) < 0) return NULL;
+    snprintf(proclnk, sizeof(proclnk), "/proc/self/fd/%d", fd);
+    if ((r = readlink(proclnk, filename, FILENAME_MAX)) < 0) return NULL;
     filename[r] = '\0';
     return filename;
 #endif
