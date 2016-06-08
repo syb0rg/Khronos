@@ -1,6 +1,6 @@
 # Khronos - Version 0.4 (alpha)
 
-Khronos is an intellegent program that utilizes speech recognition to carry out a user's command.  Khronos can also sythesize speech in order to respond to the commands given to him.
+Khronos is an intelligent program that utilizes speech recognition to carry out a user's command.  Khronos can also synthesize speech in order to respond to the commands given to him.
 
 ---
 
@@ -36,6 +36,6 @@ This is a list of the libraries Khronos requires to compile properly.
 
 You should be in the main source directory in your terminal.  Change into the `build/` folder (it should be empty, if it does not exist then create it). This will be where the final build will be housed.
 
-Run `cmake ..` and configuation should begin.  This will create a Makefile tailored for your specific environment.  Any dependencies that you need will be flagged for downloading.
+Run `cmake ..` and configuration should begin.  This will create a Makefile tailored for your specific environment.  Any dependencies that you need will be flagged for downloading.
 
 Run `make`.  All flagged dependencies will download into their own special folder, where they are configured and built for Khronos to link with.  Once everything has finished downloading and linked together, the build should be complete.  Now you can run `./Khronos`.
