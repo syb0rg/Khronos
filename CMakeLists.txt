@@ -51,8 +51,6 @@ endif ()
 # Find/install dependencies
 #
 
-message(STATUS "System: " ${CMAKE_SYSTEM_NAME})
-
 IF(WIN32)
     MESSAGE(FATAL_ERROR "Windows support in development")
     INCLUDE(${CMAKE_MODULE_PATH}/Win32-ExternalProjects.txt)
