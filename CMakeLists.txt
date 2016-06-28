@@ -2,8 +2,8 @@
 # Initial CMake and project setup
 #
 
-# Required CMake version (added ExternalProject)
-CMAKE_MINIMUM_REQUIRED(VERSION 3.0.2)
+# Required CMake version (ExternalProject)
+CMAKE_MINIMUM_REQUIRED(VERSION 2.8 FATAL_ERROR)
 INCLUDE(ExternalProject)
 SET(PROJECT_NAME Khronos)
 PROJECT(${PROJECT_NAME})
