@@ -16,26 +16,30 @@ This `.wav` file is passed to pocketsphinx for speech processing, which then ret
 
 This is a list of the libraries Khronos requires to compile properly.
 
- - [CMake](https://cmake.org/) (version 2.8.7 minimum): a portable Makefile generator.
- 
- - [LibSndFile](http://www.mega-nerd.com/libsndfile/): a library for reading and writing files containing sampled audio data.
- 
- - [PortAudio](http://www.portaudio.com/): a portable audio I/O library.
+- [CMake](https://cmake.org/) (version 2.8 minimum): a portable Makefile generator.
 
- - [sphinxbase](https://github.com/cmusphinx/sphinxbase): the basic libraries shared by the CMU Sphinx trainer and all the Sphinx decoders
+- [LibSndFile](http://www.mega-nerd.com/libsndfile/): a library for reading and writing files containing sampled audio data.
 
- - [pocketsphinx](https://github.com/cmusphinx/pocketsphinx): open source, large vocabulary, speaker-independent speech recognition engine
+- [PortAudio](http://www.portaudio.com/): a portable audio I/O library.
 
- - [tritium](https://syb0rg.github.io/tritium.io/): a free, premium quality speech synthesis engine written completely in C.
- 
- If CMake is installed and run, it will handle the downloading of all of the other dependencies (if they are not already installed on the system).
+- [sphinxbase](https://github.com/cmusphinx/sphinxbase): the basic libraries shared by the CMU Sphinx trainer and all the Sphinx decoders
+
+- [pocketsphinx](https://github.com/cmusphinx/pocketsphinx): open source, large vocabulary, speaker-independent speech recognition engine
+
+- [tritium](https://syb0rg.github.io/tritium.io/): a free, premium quality speech synthesis engine written completely in C.
+
+If CMake is installed and run, it will handle the downloading of all of the other dependencies (if they are not already installed on the system).
 
 ---
 
-### Configuration & Installation
+### Configuration & Installation Instructions
 
-You should be in the main source directory in your terminal.  Change into the `build/` folder (it should be empty, if it does not exist then create it). This will be where the final build will be housed.
+##### Windows 
 
-Run `cmake ..` and configuration should begin.  This will create a Makefile tailored for your specific environment.  Any dependencies that you need will be flagged for downloading.
+- Currently unsupported
 
-Run `make`.  All flagged dependencies will download into their own special folder, where they are configured and built for Khronos to link with.  Once everything has finished downloading and linked together, the build should be complete.  Now you can run `./Khronos`.
+##### Unix
+
+1. You should be in the main source directory in your terminal.  Change into the `build/` folder (it should be empty, if it does not exist then create it).
+2. Run `cmake ..` and configuration should begin.  This will create a Makefile tailored for your specific environment.  Any dependencies that you need will be flagged for downloading.
+3. Run `make`.  All flagged dependencies will download to be configured and built for Khronos to link with.  Once everything has finished downloading and linked together, the build should be complete.  Now you can run `./Khronos`.
