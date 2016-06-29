@@ -40,6 +40,6 @@ If CMake is installed and run, it will handle the downloading of all of the othe
 
 ##### Unix
 
-1. You should be in the main source directory in your terminal.  Change into the `build/` folder (it should be empty, if it does not exist then create it).
+1. Locate the main source directory in your terminal.  Change into the `build/` folder (it should be empty, create it if it does not exist).
 2. Run `cmake ..` and configuration should begin.  This will create a Makefile tailored for your specific environment.  Any dependencies that you need will be flagged for downloading.
 3. Run `make`.  All flagged dependencies will download to be configured and built for Khronos to link with.  Once everything has finished downloading and linked together, the build should be complete.  Now you can run `./Khronos`.

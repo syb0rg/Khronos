@@ -61,14 +61,9 @@ endif ()
 IF(WIN32)
     MESSAGE(FATAL_ERROR "Windows support in development")
     INCLUDE(${CMAKE_MODULE_PATH}/Win32-ExternalProjects.txt)
-ELSE(WIN32)
-    IF(APPLE)
-        INCLUDE(${CMAKE_MODULE_PATH}/Apple-ExternalProjects.txt)
-    ELSEIF(UNIX)
-        MESSAGE(FATAL_ERROR "Unix support in development")
-        INCLUDE(${CMAKE_MODULE_PATH}/Unix-ExternalProjects.txt)
-    ENDIF(APPLE)
-ENDIF(WIN32)
+ELSE(UNIX)
+    INCLUDE(${CMAKE_MODULE_PATH}/Unix-ExternalProjects.txt)
+ENDIF()
 
 #
 # Final project settings
