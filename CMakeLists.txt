@@ -59,7 +59,6 @@ endif ()
 #
 
 IF(WIN32)
-    MESSAGE(FATAL_ERROR "Windows support in development")
     INCLUDE(${CMAKE_MODULE_PATH}/Win32-ExternalProjects.txt)
 ELSE(UNIX)
     INCLUDE(${CMAKE_MODULE_PATH}/Unix-ExternalProjects.txt)
@@ -77,7 +76,9 @@ ADD_EXECUTABLE(${PROJECT_NAME}
         $<TARGET_OBJECTS:util>
         $<TARGET_OBJECTS:main>
         )
+		
 TARGET_LINK_LIBRARIES(${PROJECT_NAME} ${LIBS})
+
 if (DEPENDENCIES)
     MESSAGE (STATUS "Any missing dependencies will be downloaded upon running \"make\"")
     ADD_DEPENDENCIES(${PROJECT_NAME} ${DEPENDENCIES})

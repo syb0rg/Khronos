@@ -1,6 +1,12 @@
 #ifndef UTIL_H
 #define UTIL_H
 
+typedef struct
+{
+	const int fd;
+	const char* filename;
+} FileInfo;
+
 /**
  * @return the temporary file directory for your system
  */

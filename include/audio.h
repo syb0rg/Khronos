@@ -5,8 +5,9 @@
 #ifndef AUDIO_H
 #define AUDIO_H
 
-#include <portaudio.h>
 #include <stdbool.h>
+#include <stdint.h>
+#include <portaudio.h>
 
 /**
  * Holds all of the necessary information for building an

@@ -1,7 +1,7 @@
 #include <time.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <tritium/tritium_version.h>
+#include <tritium_version.h>
 #include <portaudio.h>
 #include <sndfile.h>
 
@@ -16,7 +16,7 @@
 const char* greetingResponse(void)
 {
 	const char *greetings[] = {"Hello", "Hi", "Hello there", "How is it going?", "Howdy", "How are you?"};
-	const int random = arc4random() % ARRAY_SIZE(greetings);
+	const int random = rand() % ARRAY_SIZE(greetings);
 	return greetings[random];
 }
 

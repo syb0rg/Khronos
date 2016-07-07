@@ -13,7 +13,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <time.h>
-#include <tritium/tritium.h>
+#include <tritium.h>
 #include <unistd.h>
 
 #include "audio.h"
