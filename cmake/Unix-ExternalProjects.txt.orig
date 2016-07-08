@@ -95,11 +95,11 @@ if(${LIBSNDFILE_FOUND})
 else ()
 	ExternalProject_Add(
 		LibSndFile
-<<<<<<< 21c1905190a48f92cb89715a5549696af6b39cb2
+<<<<<<< d50692c816c1b0d3ee170ec3de5f1c4e353510c1
 		GIT_REPOSITORY  	"https://github.com/syb0rg/libsndfile.git"
 =======
-		GIT_REPOSITORY      "https://github.com/erikd/libsndfile.git"
->>>>>>> Pointed ExternalProjects to GitHub for LibSndFile
+		GIT_REPOSITORY      "https://github.com/syb0rg/libsndfile.git"
+>>>>>>> Fixed tritium includes
 		SOURCE_DIR          ${CMAKE_CURRENT_SOURCE_DIR}/lib/LibSndFile
 		UPDATE_COMMAND      ""
 		INSTALL_COMMAND     ""
@@ -123,7 +123,7 @@ SET(LIBS ${LIBS} ${LIBSNDFILE_LIBRARIES})
 
 FIND_PACKAGE(tritium)
 if (${TRITIUM_FOUND})
-    INCLUDE_DIRECTORIES(${TRITIUM_INCLUDE_DIR}/)
+    INCLUDE_DIRECTORIES(${TRITIUM_INCLUDE_DIR}/tritium)
 else ()
     ExternalProject_Add(
         tritium
