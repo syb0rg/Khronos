@@ -95,9 +95,7 @@ if(${LIBSNDFILE_FOUND})
 else ()
 	ExternalProject_Add(
 		LibSndFile
-		URL                 "http://www.mega-nerd.com/libsndfile/files/libsndfile-1.0.26.tar.gz"
-		CONFIGURE_COMMAND   ${CMAKE_CURRENT_SOURCE_DIR}/lib/LibSndFile/configure --prefix=<INSTALL_DIR> --disable-external-libs
-		BUILD_COMMAND       ${MAKE}
+		GIT_REPOSITORY  	"https://github.com/syb0rg/libsndfile.git"
 		SOURCE_DIR          ${CMAKE_CURRENT_SOURCE_DIR}/lib/LibSndFile
 		UPDATE_COMMAND      ""
 		INSTALL_COMMAND     ""

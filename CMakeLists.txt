@@ -76,7 +76,8 @@ ADD_EXECUTABLE(${PROJECT_NAME}
         $<TARGET_OBJECTS:util>
         $<TARGET_OBJECTS:main>
         )
-		
+
+message(STATUS ${LIBS})
 TARGET_LINK_LIBRARIES(${PROJECT_NAME} ${LIBS})
 
 if (DEPENDENCIES)
