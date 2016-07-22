@@ -14,14 +14,8 @@ const char* getTmpDir(void);
 
 /**
  * Generates a unique temporary filename given the fileroot, creates and opens the file
- * @return file descriptor to the open file
+ * @return FileInfo of the open file
  */
-int createSafeFileDescriptor(const char* fileRoot);
-
-/**
- * Fetches the file path given the file descriptor
- * @return file path
- */
-const char* getPathFromDescriptor(int fd);
+FileInfo createFileInfo(char* fileRoot);
 
 #endif // UTIL_H

@@ -18,19 +18,13 @@ const char* getTmpDir(void)
     else return "/tmp/";
 }
 
-int createSafeFileDescriptor(const char* fileRoot)
+FileInfo createFileInfo(char* fileRoot)
 {
-	/*
-    // Creates temporary file safely
-    char flacFile[FILENAME_MAX] = "";
-    snprintf(flacFile, FILENAME_MAX, "%sXXXXXX.wav", fileRoot);
-    
-    // the 5 is for the length of the suffix ".wav"
-    return mkstemps(flacFile, 4);
-	*/
-	FileInfo file = 
+	FileInfo file =
 	{
 		.fd = mkstemp(fileRoot),
 		.filename = fileRoot
 	};
+    
+    return file;
 }

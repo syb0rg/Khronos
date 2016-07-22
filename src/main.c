@@ -74,16 +74,16 @@ int runKhronos(PaStream *stream, AudioData *data, AudioSnippet *sampleBlock, ps_
 {
     int err = 0;
     bool sampleComplete = false;
-    int fd = createSafeFileDescriptor(getTmpDir());
-    const char *fileName = getPathFromDescriptor(fd);
-    if ((err = processStream(stream, data, sampleBlock, fd, &sampleComplete)))
+    FileInfo info = createFileInfo(getTmpDir());
+    
+    if ((err = processStream(stream, data, sampleBlock, info.fd, &sampleComplete)))
     {
         fprintf(stderr, "Error recording FLAC file: %d\n", err);
         return err;
     }
     else if (sampleComplete)
     {
-        const char *text = recognizeFromFile(ps, fileName);
+        const char *text = recognizeFromFile(ps, info.filename);
         if (text)
         {
             fprintf(stdout, "Recognized text: %s\n", text);
@@ -108,9 +108,9 @@ int runKhronos(PaStream *stream, AudioData *data, AudioSnippet *sampleBlock, ps_
         }
         sampleComplete = false;
     }
-    close(fd);
-    unlink(fileName);
-    free((void*) fileName);
+    close(info.fd);
+    unlink(info.filename);
+    //free((void*) info.filename);
     return err;
 }
 
