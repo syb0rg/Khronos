@@ -5,8 +5,8 @@ else ()
     ExternalProject_Add(
         sphinxbase
         GIT_REPOSITORY      "https://github.com/cmusphinx/sphinxbase.git"
-        SOURCE_DIR          ${CMAKE_CURRENT_SOURCE_DIR}/lib/sphinxbase
-        CONFIGURE_COMMAND   ${CMAKE_CURRENT_SOURCE_DIR}/lib/sphinxbase/autogen.sh
+        SOURCE_DIR          ${CMAKE_BINARY_DIR}/lib/sphinxbase
+        CONFIGURE_COMMAND   ${CMAKE_BINARY_DIR}/lib/sphinxbase/autogen.sh
         BUILD_COMMAND       ${MAKE}
         UPDATE_COMMAND      ""
         INSTALL_COMMAND     ""
@@ -22,7 +22,7 @@ else ()
     ExternalProject_Get_Property(sphinxbase BINARY_DIR)
     SET(SPHINXBASE_SOURCE_DIR ${SOURCE_DIR})
     SET(SPHINXBASE_BINARY_DIR ${BINARY_DIR})
-    SET(SPHINXBASE_LIBRARIES ${SPHINXBASE_BINARY_DIR}/src/libsphinxbase/.libs/libsphinxbase.a)
+    SET(SPHINXBASE_LIBRARIES ${SPHINXBASE_SOURCE_DIR}/src/libsphinxbase/.libs/libsphinxbase.a)
     SET(DEPENDENCIES ${DEPENDENCIES} sphinxbase)
     INCLUDE_DIRECTORIES(${SPHINXBASE_SOURCE_DIR}/include)
 endif ()
@@ -37,8 +37,8 @@ else ()
         pocketsphinx
         DEPENDS             sphinxbase
         GIT_REPOSITORY      "https://github.com/cmusphinx/pocketsphinx.git"
-        SOURCE_DIR          ${CMAKE_CURRENT_SOURCE_DIR}/lib/pocketsphinx
-        CONFIGURE_COMMAND   ${CMAKE_CURRENT_SOURCE_DIR}/lib/pocketsphinx/autogen.sh --prefix=<INSTALL_DIR> --with-sphinxbase=${SPHINXBASE_BINARY_DIR}
+        SOURCE_DIR          ${CMAKE_BINARY_DIR}/lib/pocketsphinx
+        CONFIGURE_COMMAND   ${CMAKE_BINARY_DIR}/lib/pocketsphinx/autogen.sh --prefix=<INSTALL_DIR> --with-sphinxbase=${SPHINXBASE_BINARY_DIR}
         BUILD_COMMAND       ${MAKE}
         UPDATE_COMMAND      ""
         INSTALL_COMMAND     ""
@@ -54,7 +54,7 @@ else ()
     ExternalProject_Get_Property(pocketsphinx BINARY_DIR)
     SET(POCKETSPHINX_SOURCE_DIR ${SOURCE_DIR})
     SET(POCKETSPHINX_BINARY_DIR ${BINARY_DIR})
-    SET(POCKETSPHINX_LIBRARIES ${POCKETSPHINX_BINARY_DIR}/src/libpocketsphinx/.libs/libpocketsphinx.a)
+    SET(POCKETSPHINX_LIBRARIES ${POCKETSPHINX_SOURCE_DIR}/src/libpocketsphinx/.libs/libpocketsphinx.a)
     SET(DEPENDENCIES ${DEPENDENCIES} pocketsphinx)
     INCLUDE_DIRECTORIES(${POCKETSPHINX_SOURCE_DIR}/include/)
     add_definitions( -DMODELDIR="${POCKETSPHINX_BINARY_DIR}/model")
@@ -68,7 +68,7 @@ else ()
     ExternalProject_Add(
         PortAudio
         GIT_REPOSITORY      "https://github.com/syb0rg/PortAudio2.git"
-        SOURCE_DIR          ${CMAKE_CURRENT_SOURCE_DIR}/lib/PortAudio
+        SOURCE_DIR          ${CMAKE_BINARY_DIR}/lib/PortAudio
         UPDATE_COMMAND      ""
         INSTALL_COMMAND     ""
         BUILD_IN_SOURCE     ON
@@ -83,13 +83,12 @@ else ()
 	ExternalProject_Get_Property(PortAudio BINARY_DIR)
 	SET(PORTAUDIO_SOURCE_DIR ${SOURCE_DIR})
 	SET(PORTAUDIO_BINARY_DIR ${BINARY_DIR})
-	SET(PORTAUDIO_LIBRARIES ${PORTAUDIO_BINARY_DIR}/lib/.libs/libportaudio.dylib)
+	SET(PORTAUDIO_LIBRARIES ${PORTAUDIO_SOURCE_DIR}/lib/.libs/libportaudio.dylib)
     SET(DEPENDENCIES ${DEPENDENCIES} PortAudio)
     INCLUDE_DIRECTORIES(${PORTAUDIO_SOURCE_DIR}/include)
 endif ()
 SET(LIBS ${LIBS} ${PORTAUDIO_LIBRARIES})
 
-#[[
 FIND_PACKAGE(LibSndFile)
 if(${LIBSNDFILE_FOUND})
     INCLUDE_DIRECTORIES(${LIBSNDFILE_INCLUDE_DIRS})
@@ -97,7 +96,7 @@ else ()
 	ExternalProject_Add(
 		LibSndFile
 		GIT_REPOSITORY  	"https://github.com/syb0rg/libsndfile.git"
-		SOURCE_DIR          ${CMAKE_CURRENT_SOURCE_DIR}/lib/LibSndFile
+		SOURCE_DIR          ${CMAKE_BINARY_DIR}/lib/LibSndFile
 		UPDATE_COMMAND      ""
 		INSTALL_COMMAND     ""
         BUILD_IN_SOURCE     ON
@@ -110,44 +109,13 @@ else ()
 	)
     ExternalProject_Get_Property(LibSndFile SOURCE_DIR)
     ExternalProject_Get_Property(LibSndFile BINARY_DIR)
-    SET(LIBSNDFILE_SOURCE_DIR ${SOURCE_DIR}/src)
+    SET(LIBSNDFILE_SOURCE_DIR ${SOURCE_DIR})
     SET(LIBSNDFILE_BINARY_DIR ${BINARY_DIR})
-    SET(LIBSNDFILE_LIBRARIES ${LIBSNDFILE_BINARY_DIR}/libsndfile.dylib)
+    SET(LIBSNDFILE_LIBRARIES ${LIBSNDFILE_SOURCE_DIR}/libsndfile.dylib)
     SET(DEPENDENCIES ${DEPENDENCIES} LibSndFile)
-    INCLUDE_DIRECTORIES(${LIBSNDFILE_SOURCE_DIR})
+    INCLUDE_DIRECTORIES(${LIBSNDFILE_SOURCE_DIR}/src)
 endif ()
 SET(LIBS ${LIBS} ${LIBSNDFILE_LIBRARIES})
-]]
-
-FIND_PACKAGE(LibSndFile)
-if(${LIBSNDFILE_FOUND})
-    INCLUDE_DIRECTORIES(${LIBSNDFILE_INCLUDE_DIRS})
-else ()
-        ExternalProject_Add(
-        LibSndFile
-        URL                 "http://www.mega-nerd.com/libsndfile/files/libsndfile-1.0.27.tar.gz"
-        SOURCE_DIR          ${CMAKE_CURRENT_SOURCE_DIR}/lib/LibSndFile
-        CONFIGURE_COMMAND   ""
-        BUILD_COMMAND       ""
-        BUILD_IN_SOURCE     ON
-        LOG_DOWNLOAD        ON
-        LOG_UPDATE          ON
-        LOG_CONFIGURE       ON
-        LOG_BUILD           ON
-        LOG_TEST            ON
-        LOG_INSTALL         ON
-        )
-    message(STATUS ${LIBSNDFILE_BINARY_DIR})
-    ExternalProject_Get_Property(LibSndFile SOURCE_DIR)
-    ExternalProject_Get_Property(LibSndFile BINARY_DIR)
-    SET(LIBSNDFILE_SOURCE_DIR ${SOURCE_DIR}/src)
-    SET(LIBSNDFILE_BINARY_DIR ${BINARY_DIR})
-    SET(LIBSNDFILE_LIBRARIES ${LIBSNDFILE_BINARY_DIR}/libsndfile.dylib)
-    SET(DEPENDENCIES ${DEPENDENCIES} LibSndFile)
-    INCLUDE_DIRECTORIES(${LIBSNDFILE_SOURCE_DIR})
-endif ()
-SET(LIBS ${LIBS} ${LIBSNDFILE_LIBRARIES})
-
 
 FIND_PACKAGE(tritium)
 if (${TRITIUM_FOUND})
@@ -156,7 +124,7 @@ else ()
     ExternalProject_Add(
         tritium
         GIT_REPOSITORY  "https://github.com/syb0rg/tritium.git"
-        SOURCE_DIR      ${CMAKE_CURRENT_SOURCE_DIR}/lib/tritium
+        SOURCE_DIR      ${CMAKE_BINARY_DIR}/lib/tritium
         UPDATE_COMMAND  ""
         INSTALL_COMMAND ""
         BUILD_IN_SOURCE ON
@@ -171,7 +139,7 @@ else ()
     ExternalProject_Get_Property(tritium BINARY_DIR)
     SET(TRITIUM_SOURCE_DIR ${SOURCE_DIR})
     SET(TRITIUM_BINARY_DIR ${BINARY_DIR})
-    SET(TRITIUM_LIBRARIES ${TRITIUM_BINARY_DIR}/libtritium.a)
+    SET(TRITIUM_LIBRARIES ${TRITIUM_SOURCE_DIR}/libtritium.a)
     SET(DEPENDENCIES ${DEPENDENCIES} tritium)
     INCLUDE_DIRECTORIES(${TRITIUM_SOURCE_DIR}/include)
 endif ()
