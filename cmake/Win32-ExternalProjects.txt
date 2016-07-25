@@ -7,7 +7,7 @@ else ()
         GIT_REPOSITORY      "https://github.com/cmusphinx/sphinxbase.git"
         SOURCE_DIR          ${CMAKE_CURRENT_SOURCE_DIR}/lib/sphinxbase
         CONFIGURE_COMMAND   ""
-        BUILD_COMMAND       msbuild sphinxbase.sln /p:PlatformToolset=v140
+        BUILD_COMMAND       msbuild sphinxbase.sln /p:PlatformToolset=v140 /p:Platform=x64
         UPDATE_COMMAND      ""
         INSTALL_COMMAND     ""
         BUILD_IN_SOURCE     ON
@@ -22,7 +22,7 @@ else ()
     ExternalProject_Get_Property(sphinxbase BINARY_DIR)
     SET(SPHINXBASE_SOURCE_DIR ${SOURCE_DIR})
     SET(SPHINXBASE_BINARY_DIR ${BINARY_DIR})
-    SET(SPHINXBASE_LIBRARIES ${SPHINXBASE_BINARY_DIR}/bin/Debug/Win32/sphinxbase.dll)
+    SET(SPHINXBASE_LIBRARIES ${SPHINXBASE_BINARY_DIR}/bin/Debug/x64/sphinxbase.dll)
     SET(DEPENDENCIES ${DEPENDENCIES} sphinxbase)
     INCLUDE_DIRECTORIES(${SPHINXBASE_SOURCE_DIR}/include/win32)
 	INCLUDE_DIRECTORIES(${SPHINXBASE_SOURCE_DIR}/include)
@@ -40,7 +40,7 @@ else ()
         GIT_REPOSITORY      "https://github.com/cmusphinx/pocketsphinx.git"
         SOURCE_DIR          ${CMAKE_CURRENT_SOURCE_DIR}/lib/pocketsphinx
         CONFIGURE_COMMAND   ""
-        BUILD_COMMAND       msbuild pocketsphinx.sln /p:PlatformToolset=v140
+        BUILD_COMMAND       msbuild pocketsphinx.sln /p:PlatformToolset=v140 /p:Platform=x64
         UPDATE_COMMAND      ""
         INSTALL_COMMAND     ""
         BUILD_IN_SOURCE     ON
@@ -55,7 +55,7 @@ else ()
     ExternalProject_Get_Property(pocketsphinx BINARY_DIR)
     SET(POCKETSPHINX_SOURCE_DIR ${SOURCE_DIR})
     SET(POCKETSPHINX_BINARY_DIR ${BINARY_DIR})
-    SET(POCKETSPHINX_LIBRARIES ${POCKETSPHINX_BINARY_DIR}/bin/Debug/Win32/pocketsphinx.dll)
+    SET(POCKETSPHINX_LIBRARIES ${POCKETSPHINX_BINARY_DIR}/bin/Debug/x64/pocketsphinx.dll)
     SET(DEPENDENCIES ${DEPENDENCIES} pocketsphinx)
     INCLUDE_DIRECTORIES(${POCKETSPHINX_SOURCE_DIR}/include/)
     add_definitions(-DMODELDIR="${POCKETSPHINX_BINARY_DIR}/model")
