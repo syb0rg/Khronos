@@ -6,3 +6,7 @@ set(AUDIO_SOURCE_FILES
 )
 
 add_library(audio OBJECT ${AUDIO_SOURCE_FILES})
+
+if (DEPENDENCIES)
+    ADD_DEPENDENCIES(audio ${DEPENDENCIES})
+endif ()

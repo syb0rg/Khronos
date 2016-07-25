@@ -6,3 +6,7 @@ set(UTIL_SOURCE_FILES
 )
 
 add_library(util OBJECT ${UTIL_SOURCE_FILES})
+
+if (DEPENDENCIES)
+    ADD_DEPENDENCIES(util ${DEPENDENCIES})
+endif ()

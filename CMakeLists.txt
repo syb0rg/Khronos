@@ -23,7 +23,7 @@ SET_DIRECTORY_PROPERTIES(PROPERTIES EP_PREFIX ${CMAKE_BINARY_DIR}/library-build)
 
 if (NOT CMAKE_BUILD_TYPE)
     message(STATUS "No build type selected, default to Release")
-    set(CMAKE_BUILD_TYPE Release FORCE)
+    set(CMAKE_BUILD_TYPE CACHE Release FORCE)
 endif()
 
 set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -std=gnu11 -O0 -fprofile-arcs -ftest-coverage")
@@ -77,7 +77,6 @@ ADD_EXECUTABLE(${PROJECT_NAME}
         $<TARGET_OBJECTS:main>
         )
 
-message(STATUS ${LIBS})
 TARGET_LINK_LIBRARIES(${PROJECT_NAME} ${LIBS})
 
 if (DEPENDENCIES)
