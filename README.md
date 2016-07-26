@@ -1,4 +1,4 @@
-# Khronos - Version 0.4 (alpha)
+# Khronos - Version 0.4 (alpha) [![Build Status](https://travis-ci.org/syb0rg/Khronos.svg?branch=master)](https://travis-ci.org/syb0rg/Khronos)
 
 Khronos is an intelligent program that utilizes speech recognition to carry out a user's command.  Khronos can also synthesize speech in order to respond to the commands given to him.
 
@@ -36,7 +36,7 @@ If CMake is installed and run, it will handle the downloading of all of the othe
 
 ##### Windows 
 
-- Currently unsupported
+- In development; some patching may yield a working build.
 
 ##### Unix
 
