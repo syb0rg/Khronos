@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdint.h>
+#include <string.h>
 
 #ifndef _WIN32
 #include <fcntl.h>
@@ -20,10 +21,13 @@ const char* getTmpDir(void)
 
 FileInfo createFileInfo(char* fileRoot)
 {
+    char tempFile[FILENAME_MAX] = "";
+    snprintf(tempFile, FILENAME_MAX, "%sXXXXXX", fileRoot);
+    
 	FileInfo file =
 	{
-		.fd = mkstemp(fileRoot),
-		.filename = fileRoot
+		.fd = mkstemp(tempFile),
+		.filename = strdup(tempFile)
 	};
     
     return file;

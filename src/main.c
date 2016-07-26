@@ -110,7 +110,7 @@ int runKhronos(PaStream *stream, AudioData *data, AudioSnippet *sampleBlock, ps_
     }
     close(info.fd);
     unlink(info.filename);
-    //free((void*) info.filename);
+    free(info.filename);
     return err;
 }
 
