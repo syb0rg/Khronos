@@ -5,10 +5,10 @@ else ()
     ExternalProject_Add(
         sphinxbase
         GIT_REPOSITORY      "https://github.com/cmusphinx/sphinxbase.git"
-        SOURCE_DIR          ${CMAKE_CURRENT_SOURCE_DIR}/lib/sphinxbase
-        CONFIGURE_COMMAND   ""
-        BUILD_COMMAND       msbuild sphinxbase.sln /p:PlatformToolset=v140 /p:Platform=x64
-        UPDATE_COMMAND      ""
+        SOURCE_DIR          ${CMAKE_BINARY_DIR}/lib/sphinxbase
+        UPDATE_COMMAND  	""
+		CONFIGURE_COMMAND   ""
+        BUILD_COMMAND       msbuild sphinxbase.sln /p:PlatformToolset=v140 /p:Platform=x64# /p:BaseOutputPath=${CMAKE_BINARY_DIR}
         INSTALL_COMMAND     ""
         BUILD_IN_SOURCE     ON
         LOG_DOWNLOAD        ON
@@ -22,7 +22,7 @@ else ()
     ExternalProject_Get_Property(sphinxbase BINARY_DIR)
     SET(SPHINXBASE_SOURCE_DIR ${SOURCE_DIR})
     SET(SPHINXBASE_BINARY_DIR ${BINARY_DIR})
-    SET(SPHINXBASE_LIBRARIES ${SPHINXBASE_BINARY_DIR}/bin/Debug/x64/sphinxbase.dll)
+    SET(SPHINXBASE_LIBRARIES ${SPHINXBASE_SOURCE_DIR}/bin/Debug/x64/sphinxbase.lib)
     SET(DEPENDENCIES ${DEPENDENCIES} sphinxbase)
     INCLUDE_DIRECTORIES(${SPHINXBASE_SOURCE_DIR}/include/win32)
 	INCLUDE_DIRECTORIES(${SPHINXBASE_SOURCE_DIR}/include)
@@ -38,10 +38,10 @@ else ()
         pocketsphinx
         DEPENDS             sphinxbase
         GIT_REPOSITORY      "https://github.com/cmusphinx/pocketsphinx.git"
-        SOURCE_DIR          ${CMAKE_CURRENT_SOURCE_DIR}/lib/pocketsphinx
-        CONFIGURE_COMMAND   ""
-        BUILD_COMMAND       msbuild pocketsphinx.sln /p:PlatformToolset=v140 /p:Platform=x64
-        UPDATE_COMMAND      ""
+        SOURCE_DIR          ${CMAKE_BINARY_DIR}/lib/pocketsphinx
+        UPDATE_COMMAND  	""
+		CONFIGURE_COMMAND   ""
+        BUILD_COMMAND       msbuild pocketsphinx.sln /p:PlatformToolset=v140 /p:Platform=x64# /p:BaseOutputPath=${CMAKE_BINARY_DIR}
         INSTALL_COMMAND     ""
         BUILD_IN_SOURCE     ON
         LOG_DOWNLOAD        ON
@@ -55,7 +55,7 @@ else ()
     ExternalProject_Get_Property(pocketsphinx BINARY_DIR)
     SET(POCKETSPHINX_SOURCE_DIR ${SOURCE_DIR})
     SET(POCKETSPHINX_BINARY_DIR ${BINARY_DIR})
-    SET(POCKETSPHINX_LIBRARIES ${POCKETSPHINX_BINARY_DIR}/bin/Debug/x64/pocketsphinx.dll)
+    SET(POCKETSPHINX_LIBRARIES ${POCKETSPHINX_SOURCE_DIR}/bin/Debug/x64/pocketsphinx.lib)
     SET(DEPENDENCIES ${DEPENDENCIES} pocketsphinx)
     INCLUDE_DIRECTORIES(${POCKETSPHINX_SOURCE_DIR}/include/)
     add_definitions(-DMODELDIR="${POCKETSPHINX_BINARY_DIR}/model")
@@ -69,7 +69,7 @@ else ()
 	ExternalProject_Add(
 		PortAudio
         GIT_REPOSITORY  	"https://github.com/syb0rg/PortAudio2.git"
-        SOURCE_DIR      	${CMAKE_CURRENT_SOURCE_DIR}/lib/PortAudio
+        SOURCE_DIR      	${CMAKE_BINARY_DIR}/lib/PortAudio
 		UPDATE_COMMAND      ""
         INSTALL_COMMAND     ""
         BUILD_IN_SOURCE     ON
@@ -84,7 +84,7 @@ else ()
 	ExternalProject_Get_Property(PortAudio BINARY_DIR)
 	SET(PORTAUDIO_SOURCE_DIR ${SOURCE_DIR})
 	SET(PORTAUDIO_BINARY_DIR ${BINARY_DIR})
-	SET(PORTAUDIO_LIBRARIES ${PORTAUDIO_BINARY_DIR}/libportaudio_x86.dll)
+	SET(PORTAUDIO_LIBRARIES ${PORTAUDIO_SOURCE_DIR}/libportaudio_x86.dll.a)
     SET(DEPENDENCIES ${DEPENDENCIES} PortAudio)
     INCLUDE_DIRECTORIES(${PORTAUDIO_SOURCE_DIR}/include)
 endif ()
@@ -97,7 +97,7 @@ else ()
 	ExternalProject_Add(
 		LibSndFile
 		GIT_REPOSITORY  	"https://github.com/syb0rg/libsndfile.git"
-		SOURCE_DIR          ${CMAKE_CURRENT_SOURCE_DIR}/lib/LibSndFile
+		SOURCE_DIR          ${CMAKE_BINARY_DIR}/lib/LibSndFile
 		UPDATE_COMMAND      ""
 		INSTALL_COMMAND     ""
         BUILD_IN_SOURCE     ON
@@ -110,11 +110,11 @@ else ()
 	)
     ExternalProject_Get_Property(LibSndFile SOURCE_DIR)
     ExternalProject_Get_Property(LibSndFile BINARY_DIR)
-    SET(LIBSNDFILE_SOURCE_DIR ${SOURCE_DIR}/src)
+    SET(LIBSNDFILE_SOURCE_DIR ${SOURCE_DIR})
     SET(LIBSNDFILE_BINARY_DIR ${BINARY_DIR})
-    SET(LIBSNDFILE_LIBRARIES ${LIBSNDFILE_BINARY_DIR}/libsndfile.dll)
+    SET(LIBSNDFILE_LIBRARIES ${LIBSNDFILE_SOURCE_DIR}/libsndfile.dll.a)
     SET(DEPENDENCIES ${DEPENDENCIES} LibSndFile)
-    INCLUDE_DIRECTORIES(${LIBSNDFILE_SOURCE_DIR})
+    INCLUDE_DIRECTORIES(${LIBSNDFILE_SOURCE_DIR}/src)
 endif ()
 SET(LIBS ${LIBS} ${LIBSNDFILE_LIBRARIES})
 
@@ -125,7 +125,7 @@ else ()
     ExternalProject_Add(
         tritium
         GIT_REPOSITORY  "https://github.com/syb0rg/tritium.git"
-        SOURCE_DIR      ${CMAKE_CURRENT_SOURCE_DIR}/lib/tritium
+        SOURCE_DIR      ${CMAKE_BINARY_DIR}/lib/tritium
         UPDATE_COMMAND  ""
         INSTALL_COMMAND ""
         BUILD_IN_SOURCE ON
@@ -140,7 +140,7 @@ else ()
     ExternalProject_Get_Property(tritium BINARY_DIR)
     SET(TRITIUM_SOURCE_DIR ${SOURCE_DIR})
     SET(TRITIUM_BINARY_DIR ${BINARY_DIR})
-    SET(TRITIUM_LIBRARIES ${TRITIUM_BINARY_DIR}/libtritium.a)
+    SET(TRITIUM_LIBRARIES ${TRITIUM_SOURCE_DIR}/libtritium.a)
     SET(DEPENDENCIES ${DEPENDENCIES} tritium)
     INCLUDE_DIRECTORIES(${TRITIUM_SOURCE_DIR}/include)
 endif ()
