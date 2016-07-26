@@ -1,3 +1,28 @@
+FIND_PACKAGE(Libtool)
+if (NOT ${LIBTOOL_FOUND})
+    ExternalProject_Add(
+        Libtool
+        URL                 "http://ftpmirror.gnu.org/libtool/libtool-2.4.6.tar.gz"
+        SOURCE_DIR          ${CMAKE_BINARY_DIR}/lib/Libtool
+        UPDATE_COMMAND      ""
+        CONFIGURE_COMMAND   ${CMAKE_BINARY_DIR}/lib/Libtool/configure
+        BUILD_COMMAND       make
+        INSTALL_COMMAND     make install
+        BUILD_IN_SOURCE     ON
+        LOG_DOWNLOAD        ON
+        LOG_UPDATE          ON
+        LOG_CONFIGURE       ON
+        LOG_BUILD           ON
+        LOG_TEST            ON
+        LOG_INSTALL         ON
+    )
+    ExternalProject_Get_Property(Libtool SOURCE_DIR)
+    ExternalProject_Get_Property(Libtool BINARY_DIR)
+    SET(LIBTOOL_SOURCE_DIR ${SOURCE_DIR})
+    SET(LIBTOOL_BINARY_DIR ${BINARY_DIR})
+    SET(DEPENDENCIES ${DEPENDENCIES} Libtool)
+endif ()
+
 FIND_PACKAGE(sphinxbase)
 if (${SPHINXBASE_FOUND})
     INCLUDE_DIRECTORIES(${SPHINXBASE_INCLUDE_DIR}/sphinxbase/)
