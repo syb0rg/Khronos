@@ -34,9 +34,13 @@ If CMake is installed and run, it will handle the downloading of all of the othe
 
 ### Configuration & Installation Instructions
 
-##### Windows 
+##### 64-bit Windows
 
-- In development; some patching may yield a working build.
+Windows builds are still experimental, and in addition to CMake require [MSBuild](https://msdn.microsoft.com/en-us/library/dd393574.aspx) as well as proper C compiler for Windows such as [MinGW-w64](http://mingw-w64.org/doku.php).  Cygwin may also be an option, but has not been tested.  Instructions are based on a build with  MinGW-w64.
+
+1. Locate the main source directory in your terminal.  Change into the `build/` folder (it should be empty, create it if it does not exist).
+2. Run `cmake -G "MinGW Makefiles" ..` and configuration should begin.  This will create a Makefile tailored for your specific environment.  Any dependencies that you need will be flagged for downloading.
+3. Run `make`.  All flagged dependencies will download to be configured and built for Khronos to link with.  Once everything has finished downloading and linked together, the build should be complete.  Now you can run `Khronos.exe`.
 
 ##### Unix
 
