@@ -9,7 +9,7 @@ else ()
         UPDATE_COMMAND  	""
 		CONFIGURE_COMMAND   ""
         BUILD_COMMAND       msbuild sphinxbase.sln /p:PlatformToolset=v140 /p:Platform=x64# /p:BaseOutputPath=${CMAKE_BINARY_DIR}
-        INSTALL_COMMAND     ""
+        INSTALL_COMMAND     ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/lib/sphinxbase/bin/Debug/x64/sphinxbase.dll  ${CMAKE_BINARY_DIR}
         BUILD_IN_SOURCE     ON
         LOG_DOWNLOAD        ON
         LOG_UPDATE          ON
@@ -23,7 +23,6 @@ else ()
     SET(SPHINXBASE_SOURCE_DIR ${SOURCE_DIR})
     SET(SPHINXBASE_BINARY_DIR ${BINARY_DIR})
     SET(SPHINXBASE_LIBRARIES ${SPHINXBASE_SOURCE_DIR}/bin/Debug/x64/sphinxbase.lib)
-	#FILE(COPY ${SPHINXBASE_SOURCE_DIR}/bin/Debug/x64/sphinxbase.dll DESTINATION ${CMAKE_BINARY_DIR})
     SET(DEPENDENCIES ${DEPENDENCIES} sphinxbase)
     INCLUDE_DIRECTORIES(${SPHINXBASE_SOURCE_DIR}/include/win32)
 	INCLUDE_DIRECTORIES(${SPHINXBASE_SOURCE_DIR}/include)
@@ -43,7 +42,7 @@ else ()
         UPDATE_COMMAND  	""
 		CONFIGURE_COMMAND   ""
         BUILD_COMMAND       msbuild pocketsphinx.sln /p:PlatformToolset=v140 /p:Platform=x64# /p:BaseOutputPath=${CMAKE_BINARY_DIR}
-        INSTALL_COMMAND     ""
+        INSTALL_COMMAND     ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/lib/pocketsphinx/bin/Debug/x64/pocketsphinx.dll  ${CMAKE_BINARY_DIR}
         BUILD_IN_SOURCE     ON
         LOG_DOWNLOAD        ON
         LOG_UPDATE          ON
@@ -57,7 +56,6 @@ else ()
     SET(POCKETSPHINX_SOURCE_DIR ${SOURCE_DIR})
     SET(POCKETSPHINX_BINARY_DIR ${BINARY_DIR})
     SET(POCKETSPHINX_LIBRARIES ${POCKETSPHINX_SOURCE_DIR}/bin/Debug/x64/pocketsphinx.lib)
-    #FILE(COPY ${POCKETSPHINX_SOURCE_DIR}/bin/Debug/x64/pocketsphinx.dll DESTINATION ${CMAKE_BINARY_DIR})
 	SET(DEPENDENCIES ${DEPENDENCIES} pocketsphinx)
     INCLUDE_DIRECTORIES(${POCKETSPHINX_SOURCE_DIR}/include/)
     add_definitions(-DMODELDIR="${POCKETSPHINX_BINARY_DIR}/model")
