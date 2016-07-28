@@ -8,7 +8,7 @@ else ()
         SOURCE_DIR          ${CMAKE_BINARY_DIR}/lib/sphinxbase
         UPDATE_COMMAND  	""
 		CONFIGURE_COMMAND   ""
-        BUILD_COMMAND       msbuild sphinxbase.sln /p:PlatformToolset=v140 /p:Platform=x64# /p:BaseOutputPath=${CMAKE_BINARY_DIR}
+        BUILD_COMMAND       msbuild sphinxbase.sln /p:PlatformToolset=v140 /p:Platform=x64
         INSTALL_COMMAND     ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/lib/sphinxbase/bin/Debug/x64/sphinxbase.dll  ${CMAKE_BINARY_DIR}
         BUILD_IN_SOURCE     ON
         LOG_DOWNLOAD        ON
@@ -41,7 +41,7 @@ else ()
         SOURCE_DIR          ${CMAKE_BINARY_DIR}/lib/pocketsphinx
         UPDATE_COMMAND  	""
 		CONFIGURE_COMMAND   ""
-        BUILD_COMMAND       msbuild pocketsphinx.sln /p:PlatformToolset=v140 /p:Platform=x64# /p:BaseOutputPath=${CMAKE_BINARY_DIR}
+        BUILD_COMMAND       msbuild pocketsphinx.sln /p:PlatformToolset=v140 /p:Platform=x64
         INSTALL_COMMAND     ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/lib/pocketsphinx/bin/Debug/x64/pocketsphinx.dll  ${CMAKE_BINARY_DIR}
         BUILD_IN_SOURCE     ON
         LOG_DOWNLOAD        ON
