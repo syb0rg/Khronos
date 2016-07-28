@@ -36,7 +36,7 @@ If CMake is installed and run, it will handle the downloading of all of the othe
 
 ##### 64-bit Windows
 
-In addition to CMake, Windows builds require [MSBuild](https://msdn.microsoft.com/en-us/library/dd393574.aspx) as well as C compiler such as [MinGW-w64](http://mingw-w64.org/doku.php).  Cygwin may also be an option, but has not been tested.  Instructions are based on a build with MinGW-w64.
+In addition to CMake, Windows builds require [MSBuild](https://msdn.microsoft.com/en-us/library/dd393574.aspx) as well as C compiler such as [MinGW-w64](https://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win32/Personal%20Builds/mingw-builds/installer/mingw-w64-install.exe/download).  Cygwin may also be an option, but has not been tested.  Instructions are based on a build with MinGW-w64.
 
 1. Locate the main source directory in your terminal.  Change into the `build/` folder (it should be empty, create it if it does not exist).
 2. Run `cmake -G "MinGW Makefiles" ..` and configuration should begin.  This will create a Makefile tailored for your specific environment.  Any dependencies that you need will be flagged for downloading.
