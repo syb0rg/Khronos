@@ -1,4 +1,4 @@
-# Khronos - Version 0.4 (alpha) [![Build Status](https://travis-ci.org/syb0rg/Khronos.svg?branch=master)](https://travis-ci.org/syb0rg/Khronos)
+# Khronos - Version 0.5 (alpha) [![Build Status](https://travis-ci.org/syb0rg/Khronos.svg?branch=master)](https://travis-ci.org/syb0rg/Khronos)
 
 Khronos is an intelligent program that utilizes speech recognition to carry out a user's command.  Khronos can also synthesize speech in order to respond to the commands given to him.
 

@@ -1,7 +1,7 @@
 /**
  * @file main.c
  * @brief Khronos client
- * @version 0.4
+ * @version 0.5
  */
 #include <ctype.h>
 #include <errno.h>
