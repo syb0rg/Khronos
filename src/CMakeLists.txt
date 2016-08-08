@@ -9,5 +9,5 @@ set(MAIN_SOURCE_FILES
 add_library(main OBJECT ${MAIN_SOURCE_FILES})
 
 if (DEPENDENCIES)
-    ADD_DEPENDENCIES(main ${DEPENDENCIES})
+    add_dependencies(main ${DEPENDENCIES})
 endif ()

@@ -1,6 +1,10 @@
-FIND_PACKAGE(sphinxbase)
+#
+# sphinxbase
+#
+
+find_package(sphinxbase)
 if (${SPHINXBASE_FOUND})
-    INCLUDE_DIRECTORIES(${SPHINXBASE_INCLUDE_DIR}/sphinxbase/)
+    include_directories(${SPHINXBASE_INCLUDE_DIR}/sphinxbase/)
 else ()
     ExternalProject_Add(
         sphinxbase
@@ -18,22 +22,26 @@ else ()
     )
     ExternalProject_Get_Property(sphinxbase SOURCE_DIR)
     ExternalProject_Get_Property(sphinxbase BINARY_DIR)
-    SET(SPHINXBASE_SOURCE_DIR ${SOURCE_DIR})
-    SET(SPHINXBASE_BINARY_DIR ${BINARY_DIR})
+    set(SPHINXBASE_SOURCE_DIR ${SOURCE_DIR})
+    set(SPHINXBASE_BINARY_DIR ${BINARY_DIR})
     if (APPLE)
         set(SPHINXBASE_LIBRARIES ${SPHINXBASE_SOURCE_DIR}/libsphinxbase.dylib)
     elseif (UNIX)
         set(SPHINXBASE_LIBRARIES ${SPHINXBASE_SOURCE_DIR}/libsphinxbase.so)
     endif ()
-    SET(DEPENDENCIES ${DEPENDENCIES} sphinxbase)
-    INCLUDE_DIRECTORIES(${SPHINXBASE_SOURCE_DIR}/include)
+    set(DEPENDENCIES ${DEPENDENCIES} sphinxbase)
+    include_directories(${SPHINXBASE_SOURCE_DIR}/include)
 endif ()
-SET(LIBS ${LIBS} ${SPHINXBASE_LIBRARIES})
+set(LIBS ${LIBS} ${SPHINXBASE_LIBRARIES})
 
-FIND_PACKAGE(pocketsphinx)
+#
+# pocketsphinx
+#
+
+find_package(pocketsphinx)
 if (${POCKETSPHINX_FOUND})
-    INCLUDE_DIRECTORIES(${POCKETSPHINX_INCLUDE_DIR}/pocketsphinx/)
-    add_definitions( -DMODELDIR="/usr/local/share/pocketsphinx/model")  # more portable?
+    include_directories(${POCKETSPHINX_INCLUDE_DIR}/pocketsphinx/)
+    add_definitions(-DMODELDIR="/usr/local/share/pocketsphinx/model")  # more portable?
 else ()
     ExternalProject_Add(
         pocketsphinx
@@ -52,22 +60,26 @@ else ()
         )
     ExternalProject_Get_Property(pocketsphinx SOURCE_DIR)
     ExternalProject_Get_Property(pocketsphinx BINARY_DIR)
-    SET(POCKETSPHINX_SOURCE_DIR ${SOURCE_DIR})
-    SET(POCKETSPHINX_BINARY_DIR ${BINARY_DIR})
+    set(POCKETSPHINX_SOURCE_DIR ${SOURCE_DIR})
+    set(POCKETSPHINX_BINARY_DIR ${BINARY_DIR})
     if (APPLE)
         set(POCKETSPHINX_LIBRARIES ${POCKETSPHINX_SOURCE_DIR}/libpocketsphinx.dylib)
     elseif (UNIX)
         set(POCKETSPHINX_LIBRARIES ${POCKETSPHINX_SOURCE_DIR}/libpocketsphinx.so)
     endif ()
-    SET(DEPENDENCIES ${DEPENDENCIES} pocketsphinx)
-    INCLUDE_DIRECTORIES(${POCKETSPHINX_SOURCE_DIR}/include)
-    add_definitions( -DMODELDIR="${POCKETSPHINX_BINARY_DIR}/model")
+    set(DEPENDENCIES ${DEPENDENCIES} pocketsphinx)
+    include_directories(${POCKETSPHINX_SOURCE_DIR}/include)
+    add_definitions(-DMODELDIR="${POCKETSPHINX_BINARY_DIR}/model")
 endif ()
-SET(LIBS ${LIBS} ${POCKETSPHINX_LIBRARIES})
+set(LIBS ${LIBS} ${POCKETSPHINX_LIBRARIES})
 
-FIND_PACKAGE(PortAudio)
+#
+# portaudio
+#
+
+find_package(PortAudio)
 if (${PORTAUDIO_FOUND})
-    INCLUDE_DIRECTORIES(${PORTAUDIO_INCLUDE_DIRS})
+    include_directories(${PORTAUDIO_INCLUDE_DIRS})
 else ()
     ExternalProject_Add(
         PortAudio
@@ -85,17 +97,21 @@ else ()
     )
 	ExternalProject_Get_Property(PortAudio SOURCE_DIR)
 	ExternalProject_Get_Property(PortAudio BINARY_DIR)
-	SET(PORTAUDIO_SOURCE_DIR ${SOURCE_DIR})
-	SET(PORTAUDIO_BINARY_DIR ${BINARY_DIR})
-	SET(PORTAUDIO_LIBRARIES ${PORTAUDIO_SOURCE_DIR}/libportaudio_static.a)
-    SET(DEPENDENCIES ${DEPENDENCIES} PortAudio)
-    INCLUDE_DIRECTORIES(${PORTAUDIO_SOURCE_DIR}/include)
+	set(PORTAUDIO_SOURCE_DIR ${SOURCE_DIR})
+	set(PORTAUDIO_BINARY_DIR ${BINARY_DIR})
+	set(PORTAUDIO_LIBRARIES ${PORTAUDIO_SOURCE_DIR}/libportaudio_static.a)
+    set(DEPENDENCIES ${DEPENDENCIES} PortAudio)
+    include_directories(${PORTAUDIO_SOURCE_DIR}/include)
 endif ()
 SET(LIBS ${LIBS} ${PORTAUDIO_LIBRARIES})
 
-FIND_PACKAGE(LibSndFile)
-if(${LIBSNDFILE_FOUND})
-    INCLUDE_DIRECTORIES(${LIBSNDFILE_INCLUDE_DIRS})
+#
+# libsndfile
+#
+
+find_package(LibSndFile)
+if (${LIBSNDFILE_FOUND})
+    include_directories(${LIBSNDFILE_INCLUDE_DIRS})
 else ()
 	ExternalProject_Add(
 		LibSndFile
@@ -113,17 +129,21 @@ else ()
 	)
     ExternalProject_Get_Property(LibSndFile SOURCE_DIR)
     ExternalProject_Get_Property(LibSndFile BINARY_DIR)
-    SET(LIBSNDFILE_SOURCE_DIR ${SOURCE_DIR})
-    SET(LIBSNDFILE_BINARY_DIR ${BINARY_DIR})
-    SET(LIBSNDFILE_LIBRARIES ${LIBSNDFILE_SOURCE_DIR}/libsndfile_static.a)
-    SET(DEPENDENCIES ${DEPENDENCIES} LibSndFile)
-    INCLUDE_DIRECTORIES(${LIBSNDFILE_SOURCE_DIR}/src)
+    set(LIBSNDFILE_SOURCE_DIR ${SOURCE_DIR})
+    set(LIBSNDFILE_BINARY_DIR ${BINARY_DIR})
+    set(LIBSNDFILE_LIBRARIES ${LIBSNDFILE_SOURCE_DIR}/libsndfile_static.a)
+    set(DEPENDENCIES ${DEPENDENCIES} LibSndFile)
+    include_directories(${LIBSNDFILE_SOURCE_DIR}/src)
 endif ()
-SET(LIBS ${LIBS} ${LIBSNDFILE_LIBRARIES})
+set(LIBS ${LIBS} ${LIBSNDFILE_LIBRARIES})
 
-FIND_PACKAGE(tritium)
+#
+# tritium
+#
+
+find_package(tritium)
 if (${TRITIUM_FOUND})
-    INCLUDE_DIRECTORIES(${TRITIUM_INCLUDE_DIR}/tritium)
+    include_directories(${TRITIUM_INCLUDE_DIR}/tritium)
 else ()
     ExternalProject_Add(
         tritium
@@ -141,12 +161,16 @@ else ()
     )
     ExternalProject_Get_Property(tritium SOURCE_DIR)
     ExternalProject_Get_Property(tritium BINARY_DIR)
-    SET(TRITIUM_SOURCE_DIR ${SOURCE_DIR})
-    SET(TRITIUM_BINARY_DIR ${BINARY_DIR})
-    SET(TRITIUM_LIBRARIES ${TRITIUM_SOURCE_DIR}/libtritium.a)
-    SET(DEPENDENCIES ${DEPENDENCIES} tritium)
-    INCLUDE_DIRECTORIES(${TRITIUM_SOURCE_DIR}/include)
+    set(TRITIUM_SOURCE_DIR ${SOURCE_DIR})
+    set(TRITIUM_BINARY_DIR ${BINARY_DIR})
+    set(TRITIUM_LIBRARIES ${TRITIUM_SOURCE_DIR}/libtritium.a)
+    set(DEPENDENCIES ${DEPENDENCIES} tritium)
+    include_directories(${TRITIUM_SOURCE_DIR}/include)
 endif ()
-SET(LIBS ${LIBS} ${TRITIUM_LIBRARIES})
+set(LIBS ${LIBS} ${TRITIUM_LIBRARIES})
 
-SET(LIBS ${LIBS} m) 
+#
+# system
+#
+
+set(LIBS ${LIBS} m)

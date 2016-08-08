@@ -3,19 +3,20 @@
 #
 
 # Required CMake version (ExternalProject)
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8 FATAL_ERROR)
-INCLUDE(ExternalProject)
-SET(PROJECT_NAME Khronos)
-PROJECT(${PROJECT_NAME})
+cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
+set(PROJECT_NAME Khronos)
+project(${PROJECT_NAME})
+
+include(ExternalProject)
 
 # Set software version
-SET(APPLICATION_VERSION_MAJOR "0")
-SET(APPLICATION_VERSION_MINOR "5")
-SET(APPLICATION_VERSION_PATCH "0")
-SET(APPLICATION_VERSION "${APPLICATION_VERSION_MAJOR}.${APPLICATION_VERSION_MINOR}.${APPLICATION_VERSION_PATCH}")
+set(APPLICATION_VERSION_MAJOR "0")
+set(APPLICATION_VERSION_MINOR "5")
+set(APPLICATION_VERSION_PATCH "0")
+set(APPLICATION_VERSION "${APPLICATION_VERSION_MAJOR}.${APPLICATION_VERSION_MINOR}.${APPLICATION_VERSION_PATCH}")
 
-SET(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
-SET_DIRECTORY_PROPERTIES(PROPERTIES EP_PREFIX ${CMAKE_BINARY_DIR}/build-data)
+set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
+set_directory_properties(PROPERTIES EP_PREFIX ${CMAKE_BINARY_DIR}/build-data)
 
 #
 # Setup compiler flags
@@ -31,13 +32,13 @@ set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -std=gnu11 -O3")
 
 if (GCC_VERSION VERSION_GREATER "4.8")
 elsif (GCC_VERSION VERSION_GREATER "4.1.2")
-	SET (GCC_COMMON_WARNING_FLAGS "-pedantic -Wall -Wextra -Wconversion -Wfloat-equal -Wformat=2 -Winit-self -Winline -Winvalid-pch -Wlogical-op -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wstack-protector -Wstrict-null-sentinel -Wswitch-default -Wswitch-enum")
-	SET (GCC_COMMON_WARNING_FLAGS "${GCC_COMMON_WARNING_FLAGS} -Wno-unused-parameter")
-	SET (GCC_CXX_WARNING_FLAGS "-Wctor-dtor-privacy")
+	set (GCC_COMMON_WARNING_FLAGS "-pedantic -Wall -Wextra -Wconversion -Wfloat-equal -Wformat=2 -Winit-self -Winline -Winvalid-pch -Wlogical-op -Wmissing-declarations -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wstack-protector -Wstrict-null-sentinel -Wswitch-default -Wswitch-enum")
+	set (GCC_COMMON_WARNING_FLAGS "${GCC_COMMON_WARNING_FLAGS} -Wno-unused-parameter")
+	set (GCC_CXX_WARNING_FLAGS "-Wctor-dtor-privacy")
 else ()
-	SET(GCC_COMMON_WARNING_FLAGS "-pedantic -Wall -Wextra -Wconversion -Wfloat-equal -Wformat=2 -Winit-self -Winline -Winvalid-pch -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wstack-protector -Wstrict-null-sentinel -Wswitch-default -Wswitch-enum")
-	SET(GCC_COMMON_WARNING_FLAGS "${GCC_COMMON_WARNING_FLAGS} -Wno-unused-parameter")
-	SET(GCC_CXX_WARNING_FLAGS "-Wctor-dtor-privacy")
+	set(GCC_COMMON_WARNING_FLAGS "-pedantic -Wall -Wextra -Wconversion -Wfloat-equal -Wformat=2 -Winit-self -Winline -Winvalid-pch -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wstack-protector -Wstrict-null-sentinel -Wswitch-default -Wswitch-enum")
+	set(GCC_COMMON_WARNING_FLAGS "${GCC_COMMON_WARNING_FLAGS} -Wno-unused-parameter")
+	set(GCC_CXX_WARNING_FLAGS "-Wctor-dtor-privacy")
 endif ()
 
 #
@@ -45,41 +46,41 @@ endif ()
 #
 
 # add a target to generate API documentation with Doxygen
-FIND_PACKAGE(Doxygen)
+find_package(Doxygen)
 if (DOXYGEN_FOUND)
-	ADD_CUSTOM_TARGET(DOC
+	add_custom_target(DOC
 		${DOXYGEN_EXECUTABLE} ${CMAKE_SOURCE_DIR}/Doxyfile
 		WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/src
 		COMMENT "Generating API documentation with Doxygen" VERBATIM
-		)
+    )
 endif ()
 
 #
 # Find/install dependencies
 #
 
-IF(WIN32)
-    INCLUDE(${CMAKE_MODULE_PATH}/Win32-ExternalProjects.txt)
-ELSE(UNIX)
-    INCLUDE(${CMAKE_MODULE_PATH}/Unix-ExternalProjects.txt)
-ENDIF()
+if (WIN32)
+    include(${CMAKE_MODULE_PATH}/Win32-ExternalProjects.txt)
+else (UNIX)
+    include(${CMAKE_MODULE_PATH}/Unix-ExternalProjects.txt)
+endif ()
 
 #
 # Final project settings
 #
 
-INCLUDE_DIRECTORIES(include)
-ADD_SUBDIRECTORY(src)
+include_directories(include)
+add_subdirectory(src)
 
-ADD_EXECUTABLE(${PROJECT_NAME}
-        $<TARGET_OBJECTS:audio>
-        $<TARGET_OBJECTS:util>
-        $<TARGET_OBJECTS:main>
-        )
+add_executable(${PROJECT_NAME}
+    $<TARGET_OBJECTS:audio>
+    $<TARGET_OBJECTS:util>
+    $<TARGET_OBJECTS:main>
+)
 
-TARGET_LINK_LIBRARIES(${PROJECT_NAME} ${LIBS})
+target_link_libraries(${PROJECT_NAME} ${LIBS})
 
 if (DEPENDENCIES)
-    MESSAGE (STATUS "Any missing dependencies will be downloaded upon running \"make\"")
-    ADD_DEPENDENCIES(${PROJECT_NAME} ${DEPENDENCIES})
+    message(STATUS "Any missing dependencies will be downloaded upon running \"make\"")
+    add_dependencies(${PROJECT_NAME} ${DEPENDENCIES})
 endif ()
