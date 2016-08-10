@@ -27,8 +27,8 @@ if (NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE CACHE Release FORCE)
 endif()
 
-set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -std=gnu11 -O0 -fprofile-arcs -ftest-coverage")
-set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -std=gnu11 -O3")
+set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -O0 -fprofile-arcs -ftest-coverage")
+set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -O3")
 
 if (GCC_VERSION VERSION_GREATER "4.8")
 elsif (GCC_VERSION VERSION_GREATER "4.1.2")
@@ -78,6 +78,7 @@ add_executable(${PROJECT_NAME}
     $<TARGET_OBJECTS:main>
 )
 
+target_compile_features(${PROJECT_NAME} PRIVATE c_restrict)
 target_link_libraries(${PROJECT_NAME} ${LIBS})
 
 if (DEPENDENCIES)
