@@ -72,4 +72,8 @@ before_install:
         brew install cmake
     fi
     
-script: mkdir build && cd build && cmake .. && make
+script:
+  - mkdir build
+  - cd build
+  - cmake ..
+  - make
