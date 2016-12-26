@@ -35,16 +35,14 @@ static const char* recognizeFromFile(ps_decoder_t *ps, const char* fileName)
     FILE *file = NULL;
     const char *hyp = NULL;
     size_t k = 0;
-    
+
     if ((file = fopen(fileName, "rb")) == NULL)
-    {
         fprintf(stderr, "Failed to open file '%s' for reading", fileName);
-    }
-    
+
     // verify .wav file?  I trust libsndfile to make a valid one
     ps_start_utt(ps);
     bool uttStarted = false;
-    
+
     while ((k = fread(adbuf, sizeof(int16), 2048, file)) > 0)
     {
         ps_process_raw(ps, adbuf, k, false, false);
@@ -59,12 +57,10 @@ static const char* recognizeFromFile(ps_decoder_t *ps, const char* fileName)
         }
     }
     ps_end_utt(ps);
-    
+
     if (uttStarted)
-    {
         hyp = ps_get_hyp(ps, NULL);
-    }
-    
+
     fclose(file);
     return hyp;
 }
@@ -75,7 +71,7 @@ int runKhronos(PaStream *stream, AudioData *data, AudioSnippet *sampleBlock, ps_
     int err = 0;
     bool sampleComplete = false;
     FileInfo info = createFileInfo(getTmpDir());
-    
+
     if ((err = processStream(stream, data, sampleBlock, info.fd, &sampleComplete)))
     {
         fprintf(stderr, "Error recording FLAC file: %d\n", err);
@@ -85,9 +81,7 @@ int runKhronos(PaStream *stream, AudioData *data, AudioSnippet *sampleBlock, ps_
     {
         const char *text = recognizeFromFile(ps, info.filename);
         if (text)
-        {
             fprintf(stdout, "Recognized text: %s\n", text);
-        }
         else puts(RED_TEXT("No text recognized."));
         if (text)
         {
@@ -104,7 +98,8 @@ int runKhronos(PaStream *stream, AudioData *data, AudioSnippet *sampleBlock, ps_
                 }
             }
             // there was some text, but a response was unknown
-            if (!said) say("I could not understand what you said.");
+            if (!said)
+                say("I could not understand what you said.");
         }
         sampleComplete = false;
     }
@@ -141,11 +136,11 @@ int main(int argc, char **argv)
 {
     int err = 0;
     srand ((unsigned) time(NULL));
-    
+
     // turn off pocketsphinx output
     err_set_logfp(NULL);
     err_set_debug_level(0);
-    
+
     // handle command line arguments
     if (argc > 1)
     {
@@ -172,7 +167,7 @@ int main(int argc, char **argv)
         fprintf(stderr, "Failed to create recognizer, please update CMU Sphinx software\n");
         return -1;
     }
-    
+
     // initialize stuff for PortAudio
     AudioData *data = allocAudioData();
     AudioSnippet *sampleBlock = &((AudioSnippet)
@@ -180,16 +175,14 @@ int main(int argc, char **argv)
                                       .size = 0,
                                       .snippet = NULL
                                   });
-    
+
     PaStream *stream = NULL;
     err = init(&stream, data, sampleBlock);
-    
+
     // main program loop
     while (!err)
-    {
         err = runKhronos(stream, data, sampleBlock, ps);
-    }
-    
+
     //cleanup
     freeAudioData(&data);
     free(sampleBlock->snippet);
