@@ -20,7 +20,7 @@ This is a list of the libraries Khronos requires to compile properly.
 
 - [CMake](https://cmake.org/) (version 2.8 minimum): a portable Makefile generator.
 
-- [git](https://git-scm.com/): distributed version control system for downloading missing dependencies.
+- [Git](https://git-scm.com/): distributed version control system for downloading missing dependencies.
 
 - [LibSndFile](http://www.mega-nerd.com/libsndfile/): a library for reading and writing files containing sampled audio data.
 
@@ -32,7 +32,7 @@ This is a list of the libraries Khronos requires to compile properly.
 
 - [tritium](https://syb0rg.github.io/tritium.io/): a free, premium quality speech synthesis engine written completely in C.
 
-If CMake and git are installed, Khronos will handle the downloading of all of the other dependencies (if they are not already installed on the system).
+If CMake and Git are installed, Khronos will handle the downloading of all of the other dependencies (if they are not already installed on the system).
 
 ---
 
@@ -40,12 +40,12 @@ If CMake and git are installed, Khronos will handle the downloading of all of th
 
 ##### Windows
 
-In addition to CMake, Windows builds require a C compiler such as [MinGW-w64](https://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win32/Personal%20Builds/mingw-builds/installer/mingw-w64-install.exe/download).  Cygwin may also be an option, but has not been tested.  Instructions are based on a build with MinGW-w64.
+In addition to CMake and Git, Windows builds require a C compiler such as [MinGW-w64](https://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win32/Personal%20Builds/mingw-builds/installer/mingw-w64-install.exe/download).  Cygwin may also be an option, but has not been tested.  Instructions are based on a build with MinGW-w64.
 
 1. Make sure your PATH variable contains the location to the MinGW-w64 `bin/` folder.
 2. Locate the main source directory in your terminal.  Change into the `build/` folder (it should be empty, create it if it does not exist).
 3. Run `cmake -G "MinGW Makefiles" ..` and configuration should begin.  This will create a Makefile tailored for your specific environment.  Any dependencies that you need will be flagged for downloading.
-4. Run `make`.  All flagged dependencies will download to be configured and built for Khronos to link with.  Once everything has finished downloading and linked together, the build should be complete.  Now you can run `Khronos.exe`.
+4. Run `cmake --build .`.  All flagged dependencies will download to be configured and built for Khronos to link with.  Once everything has finished downloading and linked together, the build should be complete.  Now you can run `Khronos.exe`.
 
 ##### Unix
 
