@@ -42,9 +42,10 @@ If CMake and git are installed, Khronos will handle the downloading of all of th
 
 In addition to CMake, Windows builds require a C compiler such as [MinGW-w64](https://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win32/Personal%20Builds/mingw-builds/installer/mingw-w64-install.exe/download).  Cygwin may also be an option, but has not been tested.  Instructions are based on a build with MinGW-w64.
 
-1. Locate the main source directory in your terminal.  Change into the `build/` folder (it should be empty, create it if it does not exist).
-2. Run `cmake -G "MinGW Makefiles" ..` and configuration should begin.  This will create a Makefile tailored for your specific environment.  Any dependencies that you need will be flagged for downloading.
-3. Run `make`.  All flagged dependencies will download to be configured and built for Khronos to link with.  Once everything has finished downloading and linked together, the build should be complete.  Now you can run `Khronos.exe`.
+1. Make sure your PATH variable contains the location to the MinGW-w64 `bin/` folder.
+2. Locate the main source directory in your terminal.  Change into the `build/` folder (it should be empty, create it if it does not exist).
+3. Run `cmake -G "MinGW Makefiles" ..` and configuration should begin.  This will create a Makefile tailored for your specific environment.  Any dependencies that you need will be flagged for downloading.
+4. Run `make`.  All flagged dependencies will download to be configured and built for Khronos to link with.  Once everything has finished downloading and linked together, the build should be complete.  Now you can run `Khronos.exe`.
 
 ##### Unix
 
