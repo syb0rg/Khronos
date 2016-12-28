@@ -19,16 +19,16 @@ const char* getTmpDir(void)
     else return "/tmp/";
 }
 
-FileInfo createFileInfo(char* fileRoot)
+FileInfo createFileInfo(const char* fileRoot)
 {
     char tempFile[FILENAME_MAX] = "";
     snprintf(tempFile, FILENAME_MAX, "%sXXXXXX", fileRoot);
-    
+
 	FileInfo file =
 	{
 		.fd = mkstemp(tempFile),
 		.filename = strdup(tempFile)
 	};
-    
+
     return file;
 }

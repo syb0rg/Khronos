@@ -16,6 +16,6 @@ const char* getTmpDir(void);
  * Generates a unique temporary filename given the fileroot, creates and opens the file
  * @return FileInfo of the open file
  */
-FileInfo createFileInfo(char* fileRoot);
+FileInfo createFileInfo(const char* fileRoot);
 
 #endif // UTIL_H

@@ -105,7 +105,7 @@ int runKhronos(PaStream *stream, AudioData *data, AudioSnippet *sampleBlock, ps_
     }
     close(info.fd);
     unlink(info.filename);
-    free(info.filename);
+    free((void*) info.filename);
     return err;
 }
 
@@ -137,10 +137,6 @@ int main(int argc, char **argv)
     int err = 0;
     srand ((unsigned) time(NULL));
 
-    // turn off pocketsphinx output
-    err_set_logfp(NULL);
-    err_set_debug_level(0);
-
     // handle command line arguments
     if (argc > 1)
     {
@@ -155,6 +151,7 @@ int main(int argc, char **argv)
                                    "-hmm", MODELDIR "/en-us/en-us",
                                    "-lm", MODELDIR "/en-us/en-us.lm.bin",
                                    "-dict", MODELDIR "/en-us/cmudict-en-us.dict",
+                                   "-logfn", "/dev/null",
                                    NULL);
     if (!config)
     {
