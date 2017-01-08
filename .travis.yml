@@ -1,6 +1,6 @@
 sudo: false
 language: c
-  
+
 matrix:
   include:
     - os: linux
@@ -15,7 +15,7 @@ matrix:
             - cmake
             - cmake-data
       git:
-        depth: 3
+        depth: 1
       env: COMPILER=gcc-4.9
     - os: linux
       compiler: gcc
@@ -29,7 +29,7 @@ matrix:
             - cmake
             - cmake-data
       git:
-        depth: 3
+        depth: 1
       env: COMPILER=gcc-5
     - os: linux
       compiler: clang
@@ -44,7 +44,7 @@ matrix:
             - cmake
             - cmake-data
       git:
-        depth: 3
+        depth: 1
       env: COMPILER=clang-3.6
     - os: linux
       compiler: clang
@@ -59,19 +59,19 @@ matrix:
             - cmake
             - cmake-data
       git:
-        depth: 3
+        depth: 1
       env: COMPILER=clang-3.7
     - os: osx
       compiler: clang
       env: COMPILER=clang
-      
+
 before_install:
   - |
     if [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then
         brew update && brew unlink cmake
         brew install cmake
     fi
-    
+
 script:
   - mkdir build
   - cd build
