@@ -77,6 +77,3 @@ script:
   - cd build
   - cmake -DCMAKE_BUILD_TYPE=Debug ..
   - cmake --build .
-  - cat /home/travis/build/syb0rg/Khronos/build/build-data/src/sphinxbase-stamp/sphinxbase-configure-err.log
-  - cat /home/travis/build/syb0rg/Khronos/build/build-data/src/PortAudio-stamp/PortAudio-configure-err.log
-  - cat /home/travis/build/syb0rg/Khronos/build/build-data/src/LibSndFile-stamp/LibSndFile-configure-err.log
