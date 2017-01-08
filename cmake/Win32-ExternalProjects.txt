@@ -4,12 +4,11 @@ if (${SPHINXBASE_FOUND})
 else ()
     ExternalProject_Add(
         sphinxbase
-        GIT_REPOSITORY      "https://github.com/cmusphinx/sphinxbase.git"
+        GIT_REPOSITORY      "https://github.com/syb0rg/sphinxbase.git"
+        GIT_SHALLOW         TRUE
         SOURCE_DIR          ${CMAKE_BINARY_DIR}/lib/sphinxbase
         UPDATE_COMMAND  	""
 		CONFIGURE_COMMAND   ""
-        BUILD_COMMAND       msbuild sphinxbase.sln /p:PlatformToolset=v140 /p:Platform=x64
-        INSTALL_COMMAND     ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/lib/sphinxbase/bin/Debug/x64/sphinxbase.dll  ${CMAKE_BINARY_DIR}
         BUILD_IN_SOURCE     ON
         LOG_DOWNLOAD        ON
         LOG_UPDATE          ON
@@ -37,12 +36,11 @@ else ()
     ExternalProject_Add(
         pocketsphinx
         DEPENDS             sphinxbase
-        GIT_REPOSITORY      "https://github.com/cmusphinx/pocketsphinx.git"
+        GIT_REPOSITORY      "https://github.com/syb0rg/pocketsphinx.git"
+        GIT_SHALLOW         TRUE
         SOURCE_DIR          ${CMAKE_BINARY_DIR}/lib/pocketsphinx
         UPDATE_COMMAND  	""
 		CONFIGURE_COMMAND   ""
-        BUILD_COMMAND       msbuild pocketsphinx.sln /p:PlatformToolset=v140 /p:Platform=x64
-        INSTALL_COMMAND     ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/lib/pocketsphinx/bin/Debug/x64/pocketsphinx.dll  ${CMAKE_BINARY_DIR}
         BUILD_IN_SOURCE     ON
         LOG_DOWNLOAD        ON
         LOG_UPDATE          ON
@@ -50,7 +48,7 @@ else ()
         LOG_BUILD           ON
         LOG_TEST            ON
         LOG_INSTALL         ON
-        )
+    )
     ExternalProject_Get_Property(pocketsphinx SOURCE_DIR)
     ExternalProject_Get_Property(pocketsphinx BINARY_DIR)
     SET(POCKETSPHINX_SOURCE_DIR ${SOURCE_DIR})
@@ -67,9 +65,10 @@ if (${PORTAUDIO_FOUND})
     INCLUDE_DIRECTORIES(${PORTAUDIO_INCLUDE_DIRS})
 else ()
 	ExternalProject_Add(
-		PortAudio
-        GIT_REPOSITORY  	"https://github.com/syb0rg/PortAudio2.git"
-        SOURCE_DIR      	${CMAKE_BINARY_DIR}/lib/PortAudio
+    	PortAudio
+        GIT_REPOSITORY      "https://github.com/syb0rg/PortAudio2.git"
+        GIT_SHALLOW         TRUE
+        SOURCE_DIR          ${CMAKE_BINARY_DIR}/lib/PortAudio
 		UPDATE_COMMAND      ""
         INSTALL_COMMAND     ""
         BUILD_IN_SOURCE     ON
@@ -98,6 +97,7 @@ else ()
 		LibSndFile
 		GIT_REPOSITORY  	"https://github.com/syb0rg/libsndfile.git"
 		SOURCE_DIR          ${CMAKE_BINARY_DIR}/lib/LibSndFile
+        GIT_SHALLOW         TRUE
 		UPDATE_COMMAND      ""
 		INSTALL_COMMAND     ""
         BUILD_IN_SOURCE     ON
@@ -124,17 +124,18 @@ if (${TRITIUM_FOUND})
 else ()
     ExternalProject_Add(
         tritium
-        GIT_REPOSITORY  "https://github.com/syb0rg/tritium.git"
-        SOURCE_DIR      ${CMAKE_BINARY_DIR}/lib/tritium
-        UPDATE_COMMAND  ""
-        INSTALL_COMMAND ""
-        BUILD_IN_SOURCE ON
-        LOG_DOWNLOAD    ON
-        LOG_UPDATE      ON
-        LOG_CONFIGURE   ON
-        LOG_BUILD       ON
-        LOG_TEST        ON
-        LOG_INSTALL     ON
+        GIT_REPOSITORY      "https://github.com/syb0rg/tritium.git"
+        GIT_SHALLOW         TRUE
+        SOURCE_DIR          ${CMAKE_BINARY_DIR}/lib/tritium
+        UPDATE_COMMAND      ""
+        INSTALL_COMMAND     ""
+        BUILD_IN_SOURCE     ON
+        LOG_DOWNLOAD        ON
+        LOG_UPDATE          ON
+        LOG_CONFIGURE       ON
+        LOG_BUILD           ON
+        LOG_TEST            ON
+        LOG_INSTALL         ON
     )
     ExternalProject_Get_Property(tritium SOURCE_DIR)
     ExternalProject_Get_Property(tritium BINARY_DIR)
