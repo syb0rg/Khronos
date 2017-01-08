@@ -54,15 +54,16 @@ long storeWAV(AudioData *data, int fd)
         .samplerate = data->sampleRate,
         .format = SF_FORMAT_WAV | SF_FORMAT_PCM_16
     };
-    
+
     SNDFILE *outfile = sf_open_fd(fd, SFM_WRITE, &sfinfo, true);
-    if (!outfile) return -1;
-    
+    if (!outfile)
+        return -1;
+
     // Write the entire buffer to the file
     size_t numFrames = data->size / data->numChannels / sizeof(float);
     long written = sf_writef_float(outfile, data->recordedSamples, numFrames);
     err = numFrames - written;
-    
+
     // Force write to disk and close file
     sf_write_sync(outfile);
     sf_close(outfile);
@@ -73,8 +74,9 @@ long storeWAV(AudioData *data, int fd)
 int init(PaStream **stream, AudioData *data, AudioSnippet *sampleBlock)
 {
     PaError err = Pa_Initialize();
-    if (err) return err;
-    
+    if (err)
+        return err;
+
     const PaDeviceInfo *info = Pa_GetDeviceInfo(Pa_GetDefaultInputDevice());
     data->numChannels = 1; //info->maxInputChannels; -> must be mono for sphinx
     PaStreamParameters inputParameters =
@@ -86,11 +88,12 @@ int init(PaStream **stream, AudioData *data, AudioSnippet *sampleBlock)
         .hostApiSpecificStreamInfo = NULL
     };
     err = Pa_OpenStream(stream, &inputParameters, NULL, data->sampleRate, FRAMES_PER_BUFFER, paClipOff, NULL, NULL);
-    if (err) return err;
-    
+    if (err)
+        return err;
+
     sampleBlock->size = FRAMES_PER_BUFFER * sizeof(float) * data->numChannels;
     sampleBlock->snippet = malloc(sampleBlock->size);
-    
+
     return Pa_StartStream(*stream);
 }
 
@@ -102,7 +105,8 @@ int processStream(PaStream *stream, AudioData *data, AudioSnippet *sampleBlock, 
     PaError err = 0;
     // error value needs to be stored, but PaInputOverflow avoided
     Pa_ReadStream(stream, sampleBlock->snippet, FRAMES_PER_BUFFER);
-    if (err) return err;
+    if (err)
+        return err;
     else if(rms(sampleBlock->snippet, FRAMES_PER_BUFFER) > TALKING_THRESHOLD) // talking
     {
         printf("Listening: %d\n", i);
@@ -128,7 +132,8 @@ int processStream(PaStream *stream, AudioData *data, AudioSnippet *sampleBlock, 
         double test = difftime(time(&silence), talking);
         if (test >= 1.5 && test <= 10 && data->recordedSamples)
         {
-            if (sampleComplete) *sampleComplete = true;
+            if (sampleComplete)
+                *sampleComplete = true;
             storeWAV(data, fd);
             talking = 0;
             free(data->recordedSamples);
