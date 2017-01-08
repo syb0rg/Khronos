@@ -2,7 +2,9 @@
 
 Khronos is a program that uses speech recognition to perform a command.  Khronos also synthesizes speech in response to the given commands.
 
-[![Build Status](https://travis-ci.org/syb0rg/Khronos.svg?branch=master)](https://travis-ci.org/syb0rg/Khronos) [![Gitter](https://badges.gitter.im/khronos-project/Lobby.svg)](https://gitter.im/khronos-project/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+[![Build Status](https://travis-ci.org/syb0rg/Khronos.svg?branch=master)](https://travis-ci.org/syb0rg/Khronos) 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/20d6361d6dfc420783bf4b38c52bbc68)](https://www.codacy.com/app/syb0rg/Khronos?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=syb0rg/Khronos&amp;utm_campaign=Badge_Grade)
+[![Gitter](https://badges.gitter.im/khronos-project/Lobby.svg)](https://gitter.im/khronos-project/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 ---
 
