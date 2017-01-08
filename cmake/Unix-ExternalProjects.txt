@@ -9,7 +9,7 @@ else ()
     ExternalProject_Add(
         sphinxbase
         GIT_REPOSITORY      "https://github.com/syb0rg/sphinxbase.git"
-        #GIT_SHALLOW         TRUE
+        #GIT_SHALLOW         ON
         SOURCE_DIR          ${CMAKE_BINARY_DIR}/lib/sphinxbase
         UPDATE_COMMAND      ""
         INSTALL_COMMAND     ""
@@ -48,7 +48,7 @@ else ()
         pocketsphinx
         DEPENDS             sphinxbase
         GIT_REPOSITORY      "https://github.com/syb0rg/pocketsphinx"
-        #GIT_SHALLOW         TRUE
+        #GIT_SHALLOW         ON
         SOURCE_DIR          ${CMAKE_BINARY_DIR}/lib/pocketsphinx
         UPDATE_COMMAND      ""
         INSTALL_COMMAND     ""
@@ -86,7 +86,7 @@ else ()
     ExternalProject_Add(
         PortAudio
         GIT_REPOSITORY      "https://github.com/syb0rg/PortAudio2.git"
-        #GIT_SHALLOW         TRUE
+        #GIT_SHALLOW         ON
         SOURCE_DIR          ${CMAKE_BINARY_DIR}/lib/PortAudio
         UPDATE_COMMAND      ""
         INSTALL_COMMAND     ""
@@ -123,7 +123,7 @@ else ()
 	ExternalProject_Add(
 		LibSndFile
 		GIT_REPOSITORY  	"https://github.com/syb0rg/libsndfile.git"
-        #GIT_SHALLOW         TRUE
+        #GIT_SHALLOW         ON
 		SOURCE_DIR          ${CMAKE_BINARY_DIR}/lib/LibSndFile
 		UPDATE_COMMAND      ""
 		INSTALL_COMMAND     ""
@@ -160,7 +160,7 @@ else ()
     ExternalProject_Add(
         tritium
         GIT_REPOSITORY      "https://github.com/syb0rg/tritium.git"
-        GIT_SHALLOW        1
+        #GIT_SHALLOW         ON
         SOURCE_DIR          ${CMAKE_BINARY_DIR}/lib/tritium
         UPDATE_COMMAND      ""
         INSTALL_COMMAND     ""
