@@ -24,6 +24,12 @@ set(CMAKE_INSTALL_RPATH "${CMAKE_BINARY_DIR}/lib")
 set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
 #
+# Options
+#
+
+option(BUILD_TESTS "Build tests" ON)
+
+#
 # Setup compiler flags
 #
 
@@ -81,3 +87,19 @@ if (DEPENDENCIES)
     message(STATUS "Any missing dependencies will be downloaded upon running \"make\"")
     add_dependencies(${PROJECT_NAME} ${DEPENDENCIES})
 endif ()
+
+#
+# Testing
+#
+
+if(BUILD_TESTS)
+    include(CTest)
+    enable_testing()
+
+    set(util_test_SOURCES test/test_util)
+    add_executable(util_test ${util_test_SOURCES}
+        $<TARGET_OBJECTS:util>
+    )
+    target_compile_features(util_test PRIVATE c_restrict)
+    add_test (util_test util_test)
+endif(BUILD_TESTS)
