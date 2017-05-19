@@ -102,4 +102,12 @@ if(BUILD_TESTS)
     )
     target_compile_features(util_test PRIVATE c_restrict)
     add_test (util_test util_test)
+
+    set(audio_test_SOURCES test/test_audio)
+    add_executable(audio_test ${audio_test_SOURCES}
+        $<TARGET_OBJECTS:audio>
+    )
+    target_compile_features(audio_test PRIVATE c_restrict)
+    target_link_libraries(audio_test ${LIBS})
+    add_test (audio_test audio_test)
 endif(BUILD_TESTS)

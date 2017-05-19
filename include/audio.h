@@ -8,6 +8,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include <portaudio.h>
+#include <string.h>
 
 /**
  * Holds all of the necessary information for building an
