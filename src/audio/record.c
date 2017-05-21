@@ -16,7 +16,8 @@
 
 const static int FRAMES_PER_BUFFER = 1024;
 const static float MIN_TALKING_BUFFERS = 8;
-const static float TALKING_THRESHOLD = 0.000750;
+const static float TALKING_THRESHOLD_WEIGHT = 0.99;
+const static float TALKING_TRIGGER_RATIO = 4.0;
 
 AudioData* allocAudioData()
 {
@@ -131,13 +132,26 @@ int processStream(PaStream *stream, AudioData *data, AudioSnippet *sampleBlock, 
     static int i = 0;
     static time_t talking = 0;
     static time_t silence = 0;
+    static float talkingThreshold = 0.000750;
+    static bool wasTalking = false;
+
     PaError err = 0;
     // error value needs to be stored, but PaInputOverflow avoided
     Pa_ReadStream(stream, sampleBlock->snippet, FRAMES_PER_BUFFER);
+    
+    float talkingIntensity = rms(sampleBlock->snippet, FRAMES_PER_BUFFER);
+    
     if (err)
         return err;
-    else if(rms(sampleBlock->snippet, FRAMES_PER_BUFFER) > TALKING_THRESHOLD) // talking
+    else if(talkingIntensity > talkingThreshold) // talking
     {
+    	if (!wasTalking)
+        {
+            wasTalking = true;
+            talkingThreshold /= TALKING_TRIGGER_RATIO; // Decrease threshold to require silence to complete
+        }
+	// Lerp threshold between immediate adjusted volume and saved value
+        talkingThreshold = TALKING_THRESHOLD_WEIGHT * talkingThreshold + (1 - TALKING_THRESHOLD_WEIGHT) * talkingIntensity / TALKING_TRIGGER_RATIO;
         printf("Listening: %d\n", i);
         i++;
         time(&talking);
@@ -158,6 +172,12 @@ int processStream(PaStream *stream, AudioData *data, AudioSnippet *sampleBlock, 
     }
     else //silence
     {
+        if (wasTalking)
+        {
+            wasTalking = false;
+            talkingThreshold *= TALKING_TRIGGER_RATIO; // Require higher activation to initially trigger
+        }
+        talkingThreshold = TALKING_THRESHOLD_WEIGHT * talkingThreshold + (1 - TALKING_THRESHOLD_WEIGHT) * talkingIntensity * TALKING_TRIGGER_RATIO;
         double test = difftime(time(&silence), talking);
         if (test >= 1.5 && test <= 10 && data->recordedSamples && i >= MIN_TALKING_BUFFERS)
         {
