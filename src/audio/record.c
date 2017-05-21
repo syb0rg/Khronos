@@ -14,6 +14,7 @@
 #include "audio.h"
 
 const static int FRAMES_PER_BUFFER = 1024;
+const static float MIN_TALKING_BUFFERS = 8;
 const static float TALKING_THRESHOLD = 0.000750;
 
 AudioData* allocAudioData()
@@ -137,7 +138,7 @@ int processStream(PaStream *stream, AudioData *data, AudioSnippet *sampleBlock, 
     else //silence
     {
         double test = difftime(time(&silence), talking);
-        if (test >= 1.5 && test <= 10 && data->recordedSamples)
+        if (test >= 1.5 && test <= 10 && data->recordedSamples && i >= MIN_TALKING_BUFFERS)
         {
             if (sampleComplete)
                 *sampleComplete = true;
