@@ -28,6 +28,7 @@ set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 #
 
 option(BUILD_TESTS "Build tests" OFF)
+option(DEBUG "Debug program" OFF)
 
 #
 # Setup compiler flags
@@ -36,6 +37,10 @@ option(BUILD_TESTS "Build tests" OFF)
 if (NOT CMAKE_BUILD_TYPE)
     message(STATUS "No build type selected, default to Release")
     set(CMAKE_BUILD_TYPE CACHE Release FORCE)
+endif()
+
+if (DEBUG)
+    add_definitions(-DDEBUG=1)
 endif()
 
 
@@ -110,4 +115,4 @@ if(BUILD_TESTS)
     target_compile_features(audio_test PRIVATE c_restrict)
     target_link_libraries(audio_test ${LIBS})
     add_test (audio_test audio_test)
-endif(BUILD_TESTS)
+endif()

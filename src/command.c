@@ -37,9 +37,9 @@ const char* printVersionInfo(void)
 
 const char* printHelp(void)
 {
-	const char *helpString = "Khronos - an efficient artificial intelligence system\n"
+	const char *helpString = "Khronos - your artificial intelligence assistant\n"
 							 "usage: ./Khronos [options] [options-input]\n"
-							 "  --help, -h, help \t Displays this help information\n"
+							 "  --help, -h, help \t\t Displays this help information\n"
 							 "  --version, -v, version \t Prints all version information\n"
 							 "  --duration, -v, duration \t Changes the duration of the recording\n"
 							 "  --say, -s, say <text> \t Uses the speech synthesis engine to say <text>";

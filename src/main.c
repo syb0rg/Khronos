@@ -19,6 +19,7 @@
 #include "audio.h"
 #include "command.h"
 #include "color.h"
+#include "debug.h"
 #include "util.h"
 
 cst_voice *register_cmu_us_rms(const char *str);
@@ -37,7 +38,7 @@ static const char* recognizeFromFile(ps_decoder_t *ps, const char* fileName)
     size_t k = 0;
 
     if ((file = fopen(fileName, "rb")) == NULL)
-        fprintf(stderr, "Failed to open file '%s' for reading", fileName);
+        debug_print("Failed to open file '%s' for reading\n", fileName);
 
     // verify .wav file?  I trust libsndfile to make a valid one
     ps_start_utt(ps);
@@ -74,7 +75,7 @@ int runKhronos(PaStream *stream, AudioData *data, AudioSnippet *sampleBlock, ps_
 
     if ((err = processStream(stream, data, sampleBlock, info.fd, &sampleComplete)))
     {
-        fprintf(stderr, "Error recording FLAC file: %d\n", err);
+        debug_print("Error recording FLAC file: %d\n", err);
         return err;
     }
     else if (sampleComplete)
@@ -82,7 +83,8 @@ int runKhronos(PaStream *stream, AudioData *data, AudioSnippet *sampleBlock, ps_
         const char *text = recognizeFromFile(ps, info.filename);
         if (text)
             fprintf(stdout, "Recognized text: %s\n", text);
-        else puts(RED_TEXT("No text recognized."));
+        else
+            puts(RED_TEXT("No text recognized."));
         if (text)
         {
             bool said = false;
@@ -142,7 +144,7 @@ int main(int argc, char **argv)
     {
         if ((err = parseArgs(argc, argv)))
         {
-            fprintf(stderr, "Error parsing command line arguments.\n");
+            debug_print("%s\n", "Error parsing command line arguments.");
             return err;
         }
     }
@@ -155,13 +157,13 @@ int main(int argc, char **argv)
                                    NULL);
     if (!config)
     {
-        fprintf(stderr, "Failed to create config object, see log for details\n");
+        debug_print("%s\n", "Failed to create config, see log for details.");
         return -1;
     }
     ps_decoder_t *ps = ps_init(config);
     if (!ps)
     {
-        fprintf(stderr, "Failed to create recognizer, please update CMU Sphinx software\n");
+        debug_print("%s\n", "Failed to create recognizer, update CMU Sphinx.");
         return -1;
     }
 
@@ -177,9 +179,11 @@ int main(int argc, char **argv)
     err = init(&stream, data, sampleBlock);
 
     // main program loop
+    debug_print("%s\n", "Initialization complete, starting main loop.");
     while (!err)
         err = runKhronos(stream, data, sampleBlock, ps);
 
+    debug_print("%s\n", "Staring cleanup process.");
     //cleanup
     freeAudioData(&data);
     free(sampleBlock->snippet);
@@ -188,5 +192,7 @@ int main(int argc, char **argv)
     cmd_ln_free_r(config);
     Pa_Terminate();
     puts(Pa_GetErrorText(err));
+
+    debug_print("%s\n", "Cleanup process complete, exiting program.");
     return err;
 }

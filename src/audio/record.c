@@ -12,6 +12,7 @@
 #include <time.h>
 
 #include "audio.h"
+#include "debug.h"
 
 const static int FRAMES_PER_BUFFER = 1024;
 const static float MIN_TALKING_BUFFERS = 8;
