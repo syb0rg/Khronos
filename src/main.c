@@ -179,9 +179,15 @@ int main(int argc, char **argv)
                                       .snippet = NULL
                                   });
 
-    debug_print("%s\n", "Initializing PortAudio2 stream.");
+    debug_print("%s\n", "Initializing PortAudio2 device stream.");
     PaStream *stream = NULL;
     err = init(&stream, data, sampleBlock);
+    if (err)
+    {
+        fprintf(stderr, "%s\n", "Failed to initialize device stream");
+        return err;
+    }
+
 
     // main program loop
     debug_print("%s\n", "Initialization complete.");
