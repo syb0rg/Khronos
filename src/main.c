@@ -38,7 +38,7 @@ static const char* recognizeFromFile(ps_decoder_t *ps, const char* fileName)
     size_t k = 0;
 
     if ((file = fopen(fileName, "rb")) == NULL)
-        debug_print("Failed to open file '%s' for reading\n", fileName);
+        fprintf(stderr, "Failed to open file '%s' for reading\n", fileName);
 
     // verify .wav file?  I trust libsndfile to make a valid one
     ps_start_utt(ps);
@@ -75,7 +75,7 @@ int runKhronos(PaStream *stream, AudioData *data, AudioSnippet *sampleBlock, ps_
 
     if ((err = processStream(stream, data, sampleBlock, info.fd, &sampleComplete)))
     {
-        debug_print("Error recording FLAC file: %d\n", err);
+        fprintf(stderr, "Error recording FLAC file: %d\n", err);
         return err;
     }
     else if (sampleComplete)
@@ -136,19 +136,21 @@ static int parseArgs(int argc, char **argv)
 
 int main(int argc, char **argv)
 {
+    debug_print("%s\n", "Program started.");
     int err = 0;
     srand ((unsigned) time(NULL));
 
-    // handle command line arguments
+    debug_print("%s\n", "Handling command line arguments.");
     if (argc > 1)
     {
         if ((err = parseArgs(argc, argv)))
         {
-            debug_print("%s\n", "Error parsing command line arguments.");
+            fprintf(stderr, "%s\n", "Error parsing command line arguments.");
             return err;
         }
     }
-    // initialize pocketsphinx stuff
+
+    debug_print("%s\n", "Initializing pocketsphinx configuration.");
     cmd_ln_t *config = cmd_ln_init(NULL, ps_args(), true,
                                    "-hmm", MODELDIR "/en-us/en-us",
                                    "-lm", MODELDIR "/en-us/en-us.lm.bin",
@@ -157,17 +159,19 @@ int main(int argc, char **argv)
                                    NULL);
     if (!config)
     {
-        debug_print("%s\n", "Failed to create config, see log for details.");
-        return -1;
-    }
-    ps_decoder_t *ps = ps_init(config);
-    if (!ps)
-    {
-        debug_print("%s\n", "Failed to create recognizer, update CMU Sphinx.");
+        fprintf(stderr, "%s\n", "Failed to create config, see log for details.");
         return -1;
     }
 
-    // initialize stuff for PortAudio
+    debug_print("%s\n", "Initializing pocketsphinx decoder.");
+    ps_decoder_t *ps = ps_init(config);
+    if (!ps)
+    {
+        fprintf(stderr, "%s\n", "Failed to create recognizer, update CMU Sphinx.");
+        return -1;
+    }
+
+    debug_print("%s\n", "Initializing PortAudio2 data.");
     AudioData *data = allocAudioData();
     AudioSnippet *sampleBlock = &((AudioSnippet)
                                   {
@@ -175,6 +179,7 @@ int main(int argc, char **argv)
                                       .snippet = NULL
                                   });
 
+    debug_print("%s\n", "Initializing PortAudio2 stream.");
     PaStream *stream = NULL;
     err = init(&stream, data, sampleBlock);
 
