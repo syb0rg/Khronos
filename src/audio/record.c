@@ -86,6 +86,12 @@ int init(PaStream **stream, AudioData *data, AudioSnippet *sampleBlock)
         return err;
 
     const PaDeviceInfo *info = Pa_GetDeviceInfo(Pa_GetDefaultInputDevice());
+    if (!info)
+    {
+        debug_print("%s\n", "Unable to find default input device.");
+        fprintf(stdout, "%s\n", "Unable to find microphone.");
+        return -1;
+    }
     PaStreamParameters inputParameters =
     {
         .device = Pa_GetDefaultInputDevice(),
