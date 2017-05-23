@@ -86,7 +86,7 @@ int init(PaStream **stream, AudioData *data, AudioSnippet *sampleBlock)
         return err;
 
     err = Pa_GetDeviceCount();
-    if (err <= 0) // PaErrorCode thrown
+    if (err < 0) // PaErrorCode thrown
     {
         debug_print("%s\n", "Error retrieving device count");
         fprintf(stdout, "%s\n", "Error retrieving device count");
