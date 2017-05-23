@@ -85,13 +85,28 @@ int init(PaStream **stream, AudioData *data, AudioSnippet *sampleBlock)
     if (err)
         return err;
 
+    err = Pa_GetDeviceCount();
+    if (err <= 0) // PaErrorCode thrown
+    {
+        debug_print("%s\n", "Error retrieving device count");
+        fprintf(stdout, "%s\n", "Error retrieving device count");
+        return err;
+    }
+    else if (err == 0)
+    {
+        debug_print("%s\n", "No audio devices available");
+        fprintf(stdout, "%s\n", "No audio devices available");
+        return -1;
+    }
+
     const PaDeviceInfo *info = Pa_GetDeviceInfo(Pa_GetDefaultInputDevice());
     if (!info)
     {
-        debug_print("%s\n", "Unable to find default input device.");
-        fprintf(stdout, "%s\n", "Unable to find microphone.");
+        debug_print("%s\n", "Unable to find info on default input device.");
+        fprintf(stdout, "%s\n", "Unable to find info on default input device.");
         return -1;
     }
+
     PaStreamParameters inputParameters =
     {
         .device = Pa_GetDefaultInputDevice(),

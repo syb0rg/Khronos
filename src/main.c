@@ -179,7 +179,7 @@ int main(int argc, char **argv)
     err = init(&stream, data, sampleBlock);
 
     // main program loop
-    debug_print("%s\n", "Initialization complete, starting main loop.");
+    debug_print("%s\n", "Initialization complete.");
     while (!err)
         err = runKhronos(stream, data, sampleBlock, ps);
 
